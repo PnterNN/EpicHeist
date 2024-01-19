@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="EpicHeist">
+    <output-path>$USER_HOME$/Desktop/</output-path>
+    <root id="archive" name="EpicHeist.jar">
+      <element id="module-output" name="EpicHeist" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/FSMgasm/bd1b505/FSMgasm-bd1b505.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/Kloggs/-6d3735f72e-1/Kloggs--6d3735f72e-1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

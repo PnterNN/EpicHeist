@@ -1,0 +1,13 @@
+name: EpicHeist
+Author: PnterNN
+version: 1.0.0
+main: mc.pnternn.epicheist.EpicHeist
+api-version: 1.13
+softdepend:
+  - PlaceholderAPI
+  - Vault
+  - LuckPerms
+commands:
+  heist:
+    aliases:
+      - soygun
