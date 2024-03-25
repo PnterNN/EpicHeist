@@ -3,6 +3,8 @@ Author: PnterNN
 version: 1.0.0
 main: mc.pnternn.epicheist.EpicHeist
 api-version: 1.13
+depend:
+  - ProtocolLib
 softdepend:
   - PlaceholderAPI
   - Vault

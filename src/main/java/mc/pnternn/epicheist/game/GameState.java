@@ -11,7 +11,6 @@ import java.util.Map;
 public abstract class GameState extends StateSeries implements Listener {
     protected final Map<String, Listener> listeners = new HashMap<>();
     private final Match match;
-
     protected GameState(Match match) {
         super();
         this.match = match;
@@ -22,7 +21,6 @@ public abstract class GameState extends StateSeries implements Listener {
         super.start();
         register("self", this);
     }
-
     @Override
     public final void end() {
         super.end();
@@ -63,11 +61,9 @@ public abstract class GameState extends StateSeries implements Listener {
         listeners.remove(id);
         HandlerList.unregisterAll(listener);
     }
-
     public Match getMatch() {
         return match;
     }
-
     public Map<String, Listener> getListeners() {
         return listeners;
     }

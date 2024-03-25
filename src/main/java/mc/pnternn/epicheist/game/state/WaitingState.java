@@ -4,21 +4,22 @@ import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.game.GameState;
 import mc.pnternn.epicheist.game.Match;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
-public class StartingState extends GameState {
-    public StartingState(Match match) {
+public class WaitingState extends GameState {
+    public WaitingState(Match match) {
         super(match);
     }
     @NotNull
     @Override
     public Duration getDuration() {
-        return Duration.ofSeconds(Integer.parseInt(ConfigurationHandler.getValue("timer.starting-state.seconds")))
-                .plusMinutes(Integer.parseInt(ConfigurationHandler.getValue("timer.starting-state.minutes")))
-                .plusHours(Integer.parseInt(ConfigurationHandler.getValue("timer.starting-state.hours")))
-                .plusDays(Integer.parseInt(ConfigurationHandler.getValue("timer.starting-state.days")));
+        return Duration.ofSeconds(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.seconds")))
+                .plusMinutes(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.minutes")))
+                .plusHours(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.hours")))
+                .plusDays(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.days")));
     }
 
     @Override
@@ -39,6 +40,4 @@ public class StartingState extends GameState {
     protected void onStart() {
         getMatch().setState(this);
     }
-
-
 }

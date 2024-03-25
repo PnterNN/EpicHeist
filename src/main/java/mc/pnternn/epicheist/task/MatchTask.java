@@ -31,6 +31,7 @@ public class MatchTask implements BukkitTask {
 
     private final BukkitTask task;
     private final Runnable cancelRunnable;
+    private boolean paused = false;
 
     /**
      * repeat task constructor
