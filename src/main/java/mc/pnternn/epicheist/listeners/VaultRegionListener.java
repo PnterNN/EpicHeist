@@ -66,9 +66,6 @@ public class VaultRegionListener implements Listener {
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
-        File playerFile = new File(EpicHeist.getInstance().getDataFolder()+File.separator+"players"+File.separator+event.getPlayer().getUniqueId()+".yml");
-        if(!playerFile.exists()) playerFile.createNewFile();
-
         Player player = event.getPlayer();
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(player.getWorld()));

@@ -6,7 +6,11 @@ import mc.pnternn.epicheist.game.GameState;
 import mc.pnternn.epicheist.game.Match;
 import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.util.ColorUtil;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -14,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +47,7 @@ public class SwatState extends GameState {
     @Override
     protected void onStart() {
         for (Player player : Bukkit.getOnlinePlayers()) {
+            player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.swat-state"), 1, 1);
             ColorUtil.showTitle(player,
                     ConfigurationHandler.getValue("animated-titles.swat-state.background-color"),
                     ConfigurationHandler.getValue("animated-titles.swat-state.title-color"),
@@ -59,17 +65,22 @@ public class SwatState extends GameState {
                 }
             }
         }
+
+
+
+
     }
     @Override
     public void onEnd() {
         Double gold;
         Double money;
         for (Player player: Bukkit.getOnlinePlayers()){
+            player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.ending-state"), 1, 1);
             if(getMatch().getVaultPlayers().contains(player)){
-                gold = getMatch().getDataHolder().collectedMoney.getOrDefault(player.getUniqueId(), 0.0)/2;
-                money = getMatch().getDataHolder().collectedGold.getOrDefault(player.getUniqueId(), 0.0)/2;
+                gold = getMatch().getDataHolder().collectedGold.getOrDefault(player.getUniqueId(), 0.0)/2;
+                money = getMatch().getDataHolder().collectedMoney.getOrDefault(player.getUniqueId(), 0.0)/2;
                 getMatch().getDataHolder().collectedMoney.put(player.getUniqueId(), getMatch().getDataHolder().collectedMoney.getOrDefault(player.getUniqueId(), 0.0) -money);
-                getMatch().getDataHolder().collectedGold.put(player.getUniqueId(), getMatch().getDataHolder().collectedMoney.getOrDefault(player.getUniqueId(), 0.0) -gold);
+                getMatch().getDataHolder().collectedGold.put(player.getUniqueId(), getMatch().getDataHolder().collectedGold.getOrDefault(player.getUniqueId(), 0.0) -gold);
                 getMatch().getDataHolder().crewCollectedGold.put(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(player).getId(), getMatch().getDataHolder().crewCollectedGold.getOrDefault(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(player).getId(), 0.0)- gold);
                 getMatch().getDataHolder().crewCollectedMoney.put(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(player).getId(), getMatch().getDataHolder().crewCollectedMoney.getOrDefault(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(player).getId(), 0.0)- money);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99, 2));
@@ -80,6 +91,7 @@ public class SwatState extends GameState {
                         ConfigurationHandler.getValue("animated-titles.catch-title.title"),
                         ConfigurationHandler.getValue("animated-titles.catch-title.subtitle"));
                 player.teleport(ConfigurationHandler.getJailLocation());
+                player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.catch"), 1, 1);
             }else{
                 ColorUtil.showTitle(player,
                         ConfigurationHandler.getValue("animated-titles.ending-state.background-color"),
@@ -106,16 +118,28 @@ public class SwatState extends GameState {
         String[] topCrewsName = new String[3];
         Double[] topCrewsGold = new Double[3];
         Double[] topCrewsMoney = new Double[3];
-        List<Crew> temp = EpicHeist.getInstance().getCrewManager().getCrewList();
+        double maxvalue;
+        UUID maxvalueIndex;
+        int x;
+        List<Crew> temp = new ArrayList<>(EpicHeist.getInstance().getCrewManager().getCrewList());
         for(int i = 0; i<3;i++){
-            double maxvalue = 0.0;
-            UUID maxvalueIndex = null;
+            maxvalue= 0.0;
+            maxvalueIndex = null;
             for(Crew crew : temp){
-                if(getMatch().getDataHolder().crewCollectedGold.get(crew.getId()) > maxvalue){
-                    maxvalue = getMatch().getDataHolder().crewCollectedGold.get(crew.getId());
-                    maxvalueIndex = crew.getId();
+                x = 0;
+                for(OfflinePlayer player : crew.getMembers()){
+                    if(player.isOnline()){
+                        x++;
+                    }
+                }
+                if(x>0){
+                    if(getMatch().getDataHolder().crewCollectedGold.get(crew.getId())/x > maxvalue){
+                        maxvalue = getMatch().getDataHolder().crewCollectedGold.get(crew.getId());
+                        maxvalueIndex = crew.getId();
+                    }
                 }
             }
+
             if(maxvalueIndex!=null){
                 topCrewsName[i] = EpicHeist.getInstance().getCrewManager().getCrewById(maxvalueIndex).getName();
                 topCrewsGold[i] = getMatch().getDataHolder().crewCollectedGold.get(maxvalueIndex);
@@ -129,18 +153,29 @@ public class SwatState extends GameState {
             }
             temp.remove(EpicHeist.getInstance().getCrewManager().getCrewById(maxvalueIndex));
         }
-        for(int i = 0;i<15;i++){
-            Bukkit.broadcastMessage(" ");
-        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
+            for(int i = 0;i<15;i++){
+                Bukkit.broadcastMessage(" ");
+            }
             for(Player player : Bukkit.getOnlinePlayers()){
                 player.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("messages.gold-stealing-player"))
                         .replace("{gold}", String.valueOf(getMatch().getDataHolder().collectedGold.getOrDefault(player.getUniqueId(), 0.0)))
                         .replace("{money}", String.valueOf(getMatch().getDataHolder().collectedMoney.getOrDefault(player.getUniqueId(), 0.0))));
             }
+            ComponentBuilder hovertext = new ComponentBuilder("Top Crews:\n\n");
+            for(int i = 0; i<3;i++){
+                hovertext.append(ColorUtil.colorize(topCrewsName[i]+"&7's members"));
+                if(topCrews[i] != null){
+                    hovertext.append(ColorUtil.colorize("\n &7- "+topCrews[i].getLeader().getName()));
+                    for(OfflinePlayer player : topCrews[i].getMembers()){
+                        hovertext.append(ColorUtil.colorize("\n &7- "+player.getName()));
+                    }
+                }
+                hovertext.append(ColorUtil.colorize("\n\n"));
+            }
             for(String message : ConfigurationHandler.getList("messages.most-gold-stealing-announcement")){
-                Bukkit.broadcastMessage(ColorUtil.colorize(message
+                TextComponent msg = new TextComponent( ColorUtil.colorize(message
                         .replace("{crew_1}", topCrewsName[0])
                         .replace("{crew_2}", topCrewsName[1])
                         .replace("{crew_3}", topCrewsName[2])
@@ -151,10 +186,22 @@ public class SwatState extends GameState {
                         .replace("{money_2}", String.valueOf(topCrewsMoney[1]))
                         .replace("{money_3}", String.valueOf(topCrewsMoney[2])
                         )));
+                msg.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, hovertext.create()));
+                Bukkit.spigot().broadcast(msg);
             }
+            int i = 0;
             for(Crew crew : topCrews){
+                i++;
                 if(crew != null){
-                    for(Player player : crew.getMembers()){
+                    if(crew.getLeader().isOnline()){
+                        Player p = (Player) crew.getLeader();
+                        p.playSound(p.getLocation(), ConfigurationHandler.getValue("musics.crew-"+ i), 1, 1);
+                    }
+                    for(OfflinePlayer player : crew.getMembers()){
+                        if(player.isOnline()){
+                            Player p = (Player) player;
+                            p.playSound(p.getLocation(), ConfigurationHandler.getValue("musics.crew-"+ i), 1, 1);
+                        }
                         //TODO: Add rewards
                     }
                 }

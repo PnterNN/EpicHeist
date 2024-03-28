@@ -9,6 +9,7 @@ import mc.pnternn.epicheist.commands.HeistCommand;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.game.Match;
 import mc.pnternn.epicheist.listeners.OnCommand;
+import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.managers.CrewManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -33,10 +34,16 @@ public class EpicHeist extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        File folder = new File(getDataFolder()+File.separator+"players");
-        if(!folder.exists()) folder.mkdirs();
-
         this.crewManager = new CrewManager();
+        File folder = new File(getDataFolder()+File.separator+"crews");
+        if(!folder.exists()) folder.mkdirs();
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                crewManager.addCrew(new Crew(file));
+            }
+        }
+
+
         manager = ProtocolLibrary.getProtocolManager();
         configurationHandler.init();
         this.getLogger().info("EpicHeist created by PnterNN");
@@ -68,7 +75,9 @@ public class EpicHeist extends JavaPlugin implements Listener {
     }
     @Override
     public void onDisable() {
-        EpicHeist.getMatch().stop();
+        if(match != null){
+            EpicHeist.getMatch().stop();
+        }
         super.onDisable();
     }
     private boolean setupEconomy() {

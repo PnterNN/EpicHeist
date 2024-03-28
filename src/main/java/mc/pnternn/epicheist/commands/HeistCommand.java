@@ -1,27 +1,22 @@
 package mc.pnternn.epicheist.commands;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.game.Match;
 import mc.pnternn.epicheist.util.ColorUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.BlockState;
+import org.bukkit.FireworkEffect;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
+import org.bukkit.Color;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -32,6 +27,8 @@ public class HeistCommand implements CommandExecutor {
                 case "reload" -> {
                     ConfigurationHandler.reloadConfig();
                     sender.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&aConfig reloaded!"));
+                    EpicHeist.setMatch(new Match());
+                    EpicHeist.getMatch().start();
                 }
                 case "start" -> {
                     EpicHeist.setMatch(new Match());
@@ -39,12 +36,54 @@ public class HeistCommand implements CommandExecutor {
                 }case "stop" -> {
                     EpicHeist.getMatch().stop();
                 }case "test" -> {
-                    Player p = (Player) sender;
-                    p.sendBlockChange(p.getLocation().subtract(0,-1,0), Material.GOLD_BLOCK.createBlockData());
+                    Player player = (Player) sender;
+                    Firework fw = (Firework)player.getWorld().spawn(player.getLocation(), Firework.class);
+                    FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(true).withColor(Color.GREEN).with(FireworkEffect.Type.BALL).build();
+                    FireworkMeta fwm = fw.getFireworkMeta();
+                    fwm.clearEffects();
+                    fwm.addEffect(effect);
+                    try {
+                        Field f = fwm.getClass().getDeclaredField("power");
+                        f.setAccessible(true);
+                        f.set(fwm, Integer.valueOf(-1));
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    fw.setFireworkMeta(fwm);
                 }case "crew" -> {
                     if (sender instanceof Player) {
                         Player p = (Player) sender;
                         switch (args[1].toLowerCase()) {
+                            case "rename" ->{
+                                if (EpicHeist.getInstance().getCrewManager().isInCrew(p)) {
+                                    if (EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getLeader().equals(p)) {
+                                        EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).setName(args[2]);
+                                        p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&aCrew renamed!"));
+                                    } else {
+                                        p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cYou are not the leader of the crew!"));
+                                    }
+                                } else {
+                                    p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cYou are not in a crew!"));
+                                }
+
+                            }case "delete" ->{
+                                if (EpicHeist.getInstance().getCrewManager().isInCrew(p)) {
+                                    if (EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getLeader().equals(p)) {
+                                        EpicHeist.getInstance().getCrewManager().removeCrew(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p));
+                                        p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&aCrew deleted!"));
+                                    } else {
+                                        p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cYou are not the leader of the crew!"));
+                                    }
+                                } else {
+                                    p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cYou are not in a crew!"));
+                                }
+                            }
                             case "create" -> {
                                 if (!EpicHeist.getInstance().getCrewManager().isInCrew(p)) {
                                     EpicHeist.getInstance().getCrewManager().addCrew(new Crew(p, new ArrayList()));
@@ -74,7 +113,7 @@ public class HeistCommand implements CommandExecutor {
                                     if (EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getLeader().equals(p)) {
                                         Player target = Bukkit.getPlayer(args[2]);
                                         if (target != null) {
-                                            EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getMembers().remove(target);
+                                            EpicHeist.getInstance().getCrewManager().removeMember(target, EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p));
                                             target.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cYou have been kicked from the crew!"));
                                             p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&aPlayer kicked!"));
                                         } else {
@@ -89,7 +128,7 @@ public class HeistCommand implements CommandExecutor {
                             }case "accept" -> {
                                 if(!EpicHeist.getInstance().getCrewManager().isInCrew(p)){
                                     if (EpicHeist.getInstance().getCrewManager().hasPendingInvite(p, EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()))){
-                                        EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()).getMembers().add(p);
+                                        EpicHeist.getInstance().getCrewManager().addMember(p, EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()));
                                         EpicHeist.getInstance().getCrewManager().getPendingInvites().remove(p.getUniqueId());
                                         p.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&aYou have joined the crew!"));
                                     } else {

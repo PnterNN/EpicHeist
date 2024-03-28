@@ -42,6 +42,7 @@ public class StartingState extends GameState {
         getMatch().getDataHolder().state = this;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
+            player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.starting-state"), 1, 1);
             ColorUtil.showTitle(player,
                     ConfigurationHandler.getValue("animated-titles.starting-state.background-color"),
                     ConfigurationHandler.getValue("animated-titles.starting-state.title-color"),

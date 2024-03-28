@@ -16,70 +16,73 @@ locations:
     z: 0
     world: world
 regions:
-  world-name: 'world'
-  vault-name: 'vault'
-  door-name: 'vault-door'
+  world-name: world
+  vault-name: vault
+  door-name: door
 timer:
   waiting-state:
-    time: "17:00:00" # 24-hour format
-    week-day: 5 # 1 = Sunday, 2 = Monday, 3 = Tuesday, 4 = Wednesday, 5 = Thursday, 6 = Friday, 7 = Saturday
-    month-day: 28 # 1 - 31
-    loop: "EVERYDAY" # EVERYDAY, EVERYWEEK, EVERYMONTH
+    time: '12:55:10'
+    week-day: 2 # 1 = Sunday, 2 = Monday, 3 = Tuesday, 4 = Wednesday, 5 = Thursday, 6 = Friday, 7 = Saturday
+    month-day: 27
+    loop: EVERYDAY # EVERYDAY, EVERYWEEK, EVERYMONTH
   starting-state:
     days: 0
     hours: 0
-    minutes: 5
-    seconds: 0
+    minutes: 0
+    seconds: 12
   playing-state:
     days: 0
     hours: 0
-    minutes: 5
-    seconds: 0
+    minutes: 0
+    seconds: 10
   swat-state:
     days: 0
     hours: 0
-    minutes: 5
-    seconds: 0
-time-formats:
-  day: '{day} days, {hour} hours'
-  hour: '{hour} hours, {minute} minutes'
-  minute: '{minute} minutes, {second} seconds'
-  second: '{second} seconds'
+    minutes: 0
+    seconds: 10
+messages:
+  gold-stealing-player: '&7you has stolen &e{gold} &7gold and &e{money} &7money from the vault!'
+  most-gold-stealing-announcement:
+    - '&6Top 3 Crews:'
+    - ''
+    - '&7&l {crew_1} &e{gold_1} Gold({money_1}$)'
+    - '&7&l {crew_2} &e{gold_2} Gold({money_2}$)'
+    - '&7&l {crew_3} &e{gold_3} Gold({money_3}$)'
+    - ''
+musics:
+  starting-state: "epicheist:music.starting_state"
+  playing-state: ""
+  swat-state: "epicheist:swat.coming"
+  ending-state: "epicheist:music.ending_state"
+  gold-steal: "epicheist:gold.steal"
+  gold-steal-big: "epicheist:gold.steal_big"
+  catch: "epicheist:swat.elemination"
+  crew-1: "epicheist:rewards.crew1"
+  crew-2: "epicheist:rewards.crew1"
+  crew-3: "epicheist:rewards.crew1"
 animated-titles:
   catch-title:
-    title: 'YOU CAUGHT'
-    subtitle: 'Half the money was taken!'
-    background-color: "&7"
-    title-color: "&c"
+    title: YOU CAUGHT
+    subtitle: Half the money was taken!
+    background-color: '&7'
+    title-color: '&c'
   starting-state:
-    title: 'BANK OPENED'
-    subtitle: '30 seconds until the gate explodes!'
-    background-color: "&7"
-    title-color: "&e"
+    title: BANK OPENED
+    subtitle: 30 seconds until the gate explodes!
+    background-color: '&7'
+    title-color: '&e'
   playing-state:
-    title: 'GATE EXPLODED'
-    subtitle: 'Rob the bank and escape!'
-    background-color: "&7"
-    title-color: "&e"
+    title: GATE EXPLODED
+    subtitle: Rob the bank and escape!
+    background-color: '&7'
+    title-color: '&e'
   swat-state:
-    title: 'SWAT ARRIVED'
-    subtitle: 'run away from the SWAT team!'
-    background-color: "&7"
-    title-color: "&e"
+    title: SWAT ARRIVED
+    subtitle: run away from the SWAT team!
+    background-color: '&7'
+    title-color: '&e'
   ending-state:
-    title: 'HEIST ENDED'
-    subtitle: 'The bank is safe now!'
-    background-color: "&7"
-    title-color: "&e"
-swat-properties:
-  name: '&cSWAT'
-  amount: 2 # amount per player
-  speed: 2.0
-  armors:
-    helmet: 'DIAMOND_HELMET'
-    chestplate: 'DIAMOND_CHESTPLATE'
-    leggings: 'DIAMOND_LEGGINGS'
-    boots: 'DIAMOND_BOOTS'
-    weapon: 'STICK'
-
-
+    title: HEIST ENDED
+    subtitle: You escaped successfully!
+    background-color: '&7'
+    title-color: '&e'

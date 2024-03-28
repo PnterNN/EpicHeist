@@ -1,7 +1,9 @@
 package mc.pnternn.epicheist.managers;
 
+import mc.pnternn.epicheist.EpicHeist;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +25,22 @@ public class CrewManager {
 
     public void removeCrew(Crew paramCrew) {
         this.crewList.remove(paramCrew);
+        File crewFile = new File(EpicHeist.getInstance().getDataFolder()+File.separator+"crews"+ File.separator+paramCrew.getId()+".yml");
+        crewFile.delete();
     }
 
+    public void addMember(Player paramPlayer, Crew paramCrew) {
+        if (!paramCrew.getMembers().contains(paramPlayer)){
+            paramCrew.getMembers().add(paramPlayer);
+            paramCrew.crewFile.set("members", paramCrew.getMembers());
+            paramCrew.saveConfig();
+        }
+    }
+    public void removeMember(Player paramPlayer, Crew paramCrew) {
+        paramCrew.getMembers().remove(paramPlayer);
+        paramCrew.crewFile.set("members", paramCrew.getMembers());
+        paramCrew.saveConfig();
+    }
     public void addPendingInvite(Player paramPlayer, Crew paramCrew) {
         this.pendingInvites.put(paramPlayer.getUniqueId(), paramCrew);
     }
@@ -52,7 +68,9 @@ public class CrewManager {
     public boolean isValidCrew(Crew paramCrew) {
         return this.crewList.contains(paramCrew);
     }
-
+    public void setName(Crew paramCrew, String paramString) {
+        paramCrew.setName(paramString);
+    }
     public Crew getCrewByPlayer(Player paramPlayer) {
         Optional<Crew> optional = this.crewList.stream().filter(paramCrew -> (paramCrew.getLeader().equals(paramPlayer) || paramCrew.getMembers().contains(paramPlayer))).findFirst();
         return optional.orElse(null);

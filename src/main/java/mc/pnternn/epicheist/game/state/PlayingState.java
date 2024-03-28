@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.Random;
 
 public class PlayingState extends GameState {
     public PlayingState(Match match) {
@@ -44,7 +44,9 @@ public class PlayingState extends GameState {
     }
     @Override
     protected void onStart() {
+
         for (Player player : Bukkit.getOnlinePlayers()) {
+            player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.playing-state"), 1, 1);
             ColorUtil.showTitle(player,
                     ConfigurationHandler.getValue("animated-titles.playing-state.background-color"),
                     ConfigurationHandler.getValue("animated-titles.playing-state.title-color"),
@@ -58,19 +60,28 @@ public class PlayingState extends GameState {
         RegionBlockIteration regionBlockIteration = new RegionBlockIteration();
         for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.vault-name"))) {
             if(location.getBlock().getType() == Material.GOLD_BLOCK){
-                getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
+                Random random = new Random();
+                if(random.nextInt(0,100)<1){
+                    getMatch().getDataHolder().specialBlocks.add(location.getBlock().getState());
+                    getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
+                }else{
+                    getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
+                }
                 location.getBlock().setType(Material.AIR);
             }
         }
         for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.door-name"))) {;
             getMatch().getDataHolder().doorBlocks.add(location.getBlock().getState());
             location.getBlock().setType(Material.AIR);
-            Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name")).createExplosion(location, 1F, false, false);
+            Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name")).createExplosion(location, 0F, false, false);
         }
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for(BlockState block : getMatch().getDataHolder().goldBlocks){
                     player.sendBlockChange(block.getLocation(), Material.GOLD_BLOCK.createBlockData());
+                }
+                for(BlockState block : getMatch().getDataHolder().specialBlocks){
+                    player.sendBlockChange(block.getLocation(), Material.RAW_GOLD_BLOCK.createBlockData());
                 }
             }
         }, 5L);
