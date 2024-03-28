@@ -21,10 +21,10 @@ regions:
   door-name: 'vault-door'
 timer:
   waiting-state:
-    days: 0
-    hours: 0
-    minutes: 5
-    seconds: 0
+    time: "17:00:00" # 24-hour format
+    week-day: 5 # 1 = Sunday, 2 = Monday, 3 = Tuesday, 4 = Wednesday, 5 = Thursday, 6 = Friday, 7 = Saturday
+    month-day: 28 # 1 - 31
+    loop: "EVERYDAY" # EVERYDAY, EVERYWEEK, EVERYMONTH
   starting-state:
     days: 0
     hours: 0
@@ -45,3 +45,41 @@ time-formats:
   hour: '{hour} hours, {minute} minutes'
   minute: '{minute} minutes, {second} seconds'
   second: '{second} seconds'
+animated-titles:
+  catch-title:
+    title: 'YOU CAUGHT'
+    subtitle: 'Half the money was taken!'
+    background-color: "&7"
+    title-color: "&c"
+  starting-state:
+    title: 'BANK OPENED'
+    subtitle: '30 seconds until the gate explodes!'
+    background-color: "&7"
+    title-color: "&e"
+  playing-state:
+    title: 'GATE EXPLODED'
+    subtitle: 'Rob the bank and escape!'
+    background-color: "&7"
+    title-color: "&e"
+  swat-state:
+    title: 'SWAT ARRIVED'
+    subtitle: 'run away from the SWAT team!'
+    background-color: "&7"
+    title-color: "&e"
+  ending-state:
+    title: 'HEIST ENDED'
+    subtitle: 'The bank is safe now!'
+    background-color: "&7"
+    title-color: "&e"
+swat-properties:
+  name: '&cSWAT'
+  amount: 2 # amount per player
+  speed: 2.0
+  armors:
+    helmet: 'DIAMOND_HELMET'
+    chestplate: 'DIAMOND_CHESTPLATE'
+    leggings: 'DIAMOND_LEGGINGS'
+    boots: 'DIAMOND_BOOTS'
+    weapon: 'STICK'
+
+

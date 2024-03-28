@@ -1,16 +1,25 @@
 package mc.pnternn.epicheist.game;
 
-import mc.pnternn.epicheist.game.state.PlayingState;
-import mc.pnternn.epicheist.game.state.StartingState;
-import mc.pnternn.epicheist.game.state.SwatState;
-import mc.pnternn.epicheist.game.state.WaitingState;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
+import mc.pnternn.epicheist.EpicHeist;
+import mc.pnternn.epicheist.config.ConfigurationHandler;
+import mc.pnternn.epicheist.game.state.*;
 import mc.pnternn.epicheist.task.MatchTaskManager;
 import net.minikloon.fsmgasm.StateSeries;
+import org.bukkit.Bukkit;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Match {
     private final MatchTaskManager matchTaskManager = new MatchTaskManager();
     private final StateSeries stateseries;
-    private int day,hour,minute,second;
-    private GameState state;
+    private DataHolder dataHolder = new DataHolder();
     public Match() {
         stateseries = new StateSeries(
                 new WaitingState(this),
@@ -21,42 +30,35 @@ public class Match {
     }
     public void start(){
         stateseries.start();
-        matchTaskManager.repeatTask("heart-beat", stateseries::update,20);
+        matchTaskManager.repeatTask("heart-beat", stateseries::update,19);
     }
+    public void stop(){
+        stateseries.end();
+        matchTaskManager.cancelTask("heart-beat");
+        dataHolder.uninstall();
+    }
+
+    public List<Player> getVaultPlayers(){
+        List<Player> players = new ArrayList<>();
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name"))));
+        for (Player player: Bukkit.getOnlinePlayers()){
+            if(regions.getRegion(ConfigurationHandler.getValue("regions.vault-name")).
+                    contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())){
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
     public MatchTaskManager getMatchTaskManager() {
         return matchTaskManager;
     }
     public StateSeries getStateseries() {
         return stateseries;
     }
-    public GameState getState() {
-        return state;
+    public DataHolder getDataHolder() {
+        return dataHolder;
     }
-    public void setState(GameState state) {
-        this.state = state;
-    }
-    public int getDay() {
-        return day;
-    }
-    public void setDay(int day) {
-        this.day = day;
-    }
-    public int getHour() {
-        return hour;
-    }
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-    public int getMinute() {
-        return minute;
-    }
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
-    public int getSecond() {
-        return second;
-    }
-    public void setSecond(int second) {
-        this.second = second;
-    }
+
 }

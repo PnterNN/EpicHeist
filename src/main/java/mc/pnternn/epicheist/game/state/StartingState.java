@@ -1,9 +1,11 @@
 package mc.pnternn.epicheist.game.state;
 
-import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.game.GameState;
 import mc.pnternn.epicheist.game.Match;
+import mc.pnternn.epicheist.util.ColorUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -23,10 +25,10 @@ public class StartingState extends GameState {
 
     @Override
     public void onUpdate(){
-        getMatch().setDay((int) getRemainingDuration().toDaysPart());
-        getMatch().setHour(getRemainingDuration().toHoursPart());
-        getMatch().setMinute(getRemainingDuration().toMinutesPart());
-        getMatch().setSecond(getRemainingDuration().toSecondsPart());
+        getMatch().getDataHolder().day = ((int) getRemainingDuration().toDaysPart());
+        getMatch().getDataHolder().hour = (getRemainingDuration().toHoursPart());
+        getMatch().getDataHolder().minute = (getRemainingDuration().toMinutesPart());
+        getMatch().getDataHolder().second = (getRemainingDuration().toSecondsPart());
         if(getRemainingDuration().toSeconds() == 0){
             getMatch().getStateseries().skip();
         }
@@ -37,7 +39,15 @@ public class StartingState extends GameState {
 
     @Override
     protected void onStart() {
-        getMatch().setState(this);
+        getMatch().getDataHolder().state = this;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            ColorUtil.showTitle(player,
+                    ConfigurationHandler.getValue("animated-titles.starting-state.background-color"),
+                    ConfigurationHandler.getValue("animated-titles.starting-state.title-color"),
+                    ConfigurationHandler.getValue("animated-titles.starting-state.title"),
+                    ConfigurationHandler.getValue("animated-titles.starting-state.subtitle"));
+        }
     }
 
 

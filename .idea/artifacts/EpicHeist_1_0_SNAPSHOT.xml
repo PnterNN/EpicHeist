@@ -3,9 +3,15 @@
     <output-path>$USER_HOME$/Desktop/GrandSkyblock/plugins</output-path>
     <root id="archive" name="EpicHeist-1.0-SNAPSHOT.jar">
       <element id="module-output" name="EpicHeist" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/FSMgasm/bd1b505/FSMgasm-bd1b505.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/Kloggs/-6d3735f72e-1/Kloggs--6d3735f72e-1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy/1.14.9/byte-buddy-1.14.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/FSMgasm/bd1b505/FSMgasm-bd1b505.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Anon8281/UniversalScheduler/0.1.6/UniversalScheduler-0.1.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-invs/core/4.3.0/core-4.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/database/2.0.6/database-2.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/placeholder/2.0.6/placeholder-2.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/string/2.0.6/string-2.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/version-detection/2.0.6/version-detection-2.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/2.0.6/obliviate-utils-2.0.6.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/kyori/adventure-api/4.16.0/adventure-api-4.16.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/kyori/adventure-key/4.16.0/adventure-key-4.16.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/kyori/adventure-text-minimessage/4.16.0/adventure-text-minimessage-4.16.0.jar" path-in-jar="/" />
@@ -15,7 +21,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jre7/1.1.1/kotlin-stdlib-jre7-1.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jre8/1.1.1/kotlin-stdlib-jre8-1.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4/kotlin-stdlib-1.1.4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/23.0.0/annotations-23.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/20.1.0/annotations-20.1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" path-in-jar="/" />
     </root>
   </artifact>

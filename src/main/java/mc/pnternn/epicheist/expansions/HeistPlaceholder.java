@@ -1,10 +1,13 @@
-package mc.pnternn.epicheist.Expansions;
+package mc.pnternn.epicheist.expansions;
 
 import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
+import mc.pnternn.epicheist.game.state.DataHolder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+
+import javax.xml.crypto.Data;
 
 public class HeistPlaceholder extends PlaceholderExpansion {
     @Override
@@ -26,22 +29,22 @@ public class HeistPlaceholder extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         EpicHeist.getInstance();
         if (EpicHeist.getMatch() != null){
-            EpicHeist.getInstance();
+            DataHolder dataHolder = EpicHeist.getMatch().getDataHolder();
             if(params.equalsIgnoreCase("timer_full_time")){
-                return EpicHeist.getMatch().getDay() + "gün, " + EpicHeist.getMatch().getHour() + "saat, " + EpicHeist.getMatch().getMinute() + "dakika, " + EpicHeist.getMatch().getSecond() + "saniye";
+                return dataHolder.getDay() + "gün, " + dataHolder.getHour() + "saat, " + dataHolder.getMinute() + "dakika, " + dataHolder.getSecond() + "saniye";
             }
             if (params.equalsIgnoreCase("timer_time")) {
-                return ConfigurationHandler.getTimeFormat(EpicHeist.getMatch().getDay(), EpicHeist.getMatch().getHour(), EpicHeist.getMatch().getMinute(), EpicHeist.getMatch().getSecond());
+                return ConfigurationHandler.getTimeFormat(dataHolder.getDay(), dataHolder.getHour(), dataHolder.getMinute(), dataHolder.getSecond());
             }else if(params.equalsIgnoreCase("timer_day")){
-                return String.valueOf(EpicHeist.getMatch().getDay());
+                return String.valueOf(dataHolder.getDay());
             }else if(params.equalsIgnoreCase("timer_hour")){
-                return String.valueOf(EpicHeist.getMatch().getHour());
+                return String.valueOf(dataHolder.getHour());
             }else if(params.equalsIgnoreCase("timer_minute")){
-                return String.valueOf(EpicHeist.getMatch().getMinute());
+                return String.valueOf(dataHolder.getMinute());
             }else if(params.equalsIgnoreCase("timer_second")){
-                return String.valueOf(EpicHeist.getMatch().getSecond());
+                return String.valueOf(dataHolder.getSecond());
             }else if(params.equalsIgnoreCase("state")){
-                return EpicHeist.getMatch().getState().getClass().getSimpleName();
+                return dataHolder.getState().getClass().getSimpleName();
             }
         }
         return "...";
