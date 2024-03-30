@@ -41,21 +41,20 @@ timer:
     minutes: 0
     seconds: 10
 messages:
+  not-enough-players: '&cNot enough players to start the heist!'
   gold-stealing-player: '&7you has stolen &e{gold} &7gold and &e{money} &7money from the vault!'
   most-gold-stealing-announcement:
     - '&6Top 3 Crews:'
     - ''
-    - '&7&l {crew_1} &e{gold_1} Gold({money_1}$)'
-    - '&7&l {crew_2} &e{gold_2} Gold({money_2}$)'
-    - '&7&l {crew_3} &e{gold_3} Gold({money_3}$)'
+    - '&7&l {crew_1} &e{gold_1} Gold, {money_1}$ &7({percent_1} Gold/per player)'
+    - '&7&l {crew_2} &e{gold_2} Gold, {money_2}$ &7({percent_2} Gold/per player)'
+    - '&7&l {crew_3} &e{gold_3} Gold, {money_3}$ &7({percent_3} Gold/per player)'
     - ''
 musics:
   starting-state: "epicheist:music.starting_state"
   playing-state: ""
   swat-state: "epicheist:swat.coming"
   ending-state: "epicheist:music.ending_state"
-  gold-steal: "epicheist:gold.steal"
-  gold-steal-big: "epicheist:gold.steal_big"
   catch: "epicheist:swat.elemination"
   crew-1: "epicheist:rewards.crew1"
   crew-2: "epicheist:rewards.crew1"
@@ -86,3 +85,41 @@ animated-titles:
     subtitle: You escaped successfully!
     background-color: '&7'
     title-color: '&e'
+gold:
+  big-gold:
+    block: RAW_GOLD_BLOCK
+    chance: 1
+    sound: "epicheist:gold.steal_big"
+    money:
+      default:
+        permission: "epicheist.default"
+        min: 100
+        max: 200
+      vip:
+        permission: "epicheist.vip"
+        min: 200
+        max: 400
+  small-gold:
+    block: GOLD_BLOCK
+    sound: "epicheist:gold.steal"
+    money:
+      default:
+        permission: "epicheist.default"
+        min: 10
+        max: 20
+      vip:
+        permission: "epicheist.vip"
+        min: 20
+        max: 40
+swat:
+  name: "&1SWAT"
+  amount: 2 #per player
+  speed: 0.3
+  jump: 0.5
+  armor:
+    helmet: DIAMOND_HELMET
+    chestplate: DIAMOND_CHESTPLATE
+    leggings: DIAMOND_LEGGINGS
+    boots: DIAMOND_BOOTS
+
+

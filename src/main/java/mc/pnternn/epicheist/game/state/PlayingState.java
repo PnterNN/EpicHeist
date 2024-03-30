@@ -44,7 +44,6 @@ public class PlayingState extends GameState {
     }
     @Override
     protected void onStart() {
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.playing-state"), 1, 1);
             ColorUtil.showTitle(player,
@@ -53,15 +52,14 @@ public class PlayingState extends GameState {
                     ConfigurationHandler.getValue("animated-titles.playing-state.title"),
                     ConfigurationHandler.getValue("animated-titles.playing-state.subtitle"));
         }
-
         getMatch().getDataHolder().state = this;
         EpicHeist.getInstance().getProtocolManager().addPacketListener(getMatch().getDataHolder().goldBreakEvent);
 
         RegionBlockIteration regionBlockIteration = new RegionBlockIteration();
         for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.vault-name"))) {
-            if(location.getBlock().getType() == Material.GOLD_BLOCK){
+            if(location.getBlock().getType() == Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block"))){
                 Random random = new Random();
-                if(random.nextInt(0,100)<1){
+                if(random.nextInt(0,100)<Integer.parseInt(ConfigurationHandler.getValue("gold.big-gold.chance"))){
                     getMatch().getDataHolder().specialBlocks.add(location.getBlock().getState());
                     getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
                 }else{
@@ -78,10 +76,10 @@ public class PlayingState extends GameState {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 for(BlockState block : getMatch().getDataHolder().goldBlocks){
-                    player.sendBlockChange(block.getLocation(), Material.GOLD_BLOCK.createBlockData());
+                    player.sendBlockChange(block.getLocation(), Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
                 }
                 for(BlockState block : getMatch().getDataHolder().specialBlocks){
-                    player.sendBlockChange(block.getLocation(), Material.RAW_GOLD_BLOCK.createBlockData());
+                    player.sendBlockChange(block.getLocation(), Material.getMaterial(ConfigurationHandler.getValue("gold.big-gold.block")).createBlockData());
                 }
             }
         }, 5L);

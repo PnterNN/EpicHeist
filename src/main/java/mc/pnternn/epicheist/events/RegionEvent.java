@@ -24,7 +24,6 @@ public class RegionEvent extends PlayerEvent{
     private ProtectedRegion region;
     private MovementWay movement;
     public PlayerEvent parentEvent;
-
     public RegionEvent(ProtectedRegion region, Player player, MovementWay movement, PlayerEvent parent) {
         super(player);
         this.region = region;
@@ -34,18 +33,15 @@ public class RegionEvent extends PlayerEvent{
     public HandlerList getHandlers() {
         return handlerList;
     }
-
     public ProtectedRegion getRegion() {
         return this.region;
     }
     public static HandlerList getHandlerList() {
         return handlerList;
     }
-
     public MovementWay getMovementWay() {
         return this.movement;
     }
-
     public PlayerEvent getParentEvent() {
         return this.parentEvent;
     }

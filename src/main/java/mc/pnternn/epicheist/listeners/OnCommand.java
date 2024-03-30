@@ -19,10 +19,12 @@ public class OnCommand implements Listener {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(new BukkitWorld(event.getPlayer().getWorld()));
         ProtectedRegion region = regions.getRegion(ConfigurationHandler.getValue("regions.vault-name"));
-        if (region.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())){
-            if(!player.hasPermission("epicheist.admin")){
-                event.setCancelled(true);
-                player.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cyou can't use commands inside the vault!"));
+        if(region!=null){
+            if (region.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())){
+                if(!player.hasPermission("epicheist.admin")){
+                    event.setCancelled(true);
+                    player.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cyou can't use commands inside the vault!"));
+                }
             }
         }
     }

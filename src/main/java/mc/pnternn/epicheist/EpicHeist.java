@@ -3,7 +3,7 @@ package mc.pnternn.epicheist;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import mc.pnternn.epicheist.listeners.RegionEventsListener;
-import mc.pnternn.epicheist.listeners.VaultRegionListener;
+import mc.pnternn.epicheist.listeners.HeistListeners;
 import mc.pnternn.epicheist.expansions.HeistPlaceholder;
 import mc.pnternn.epicheist.commands.HeistCommand;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
@@ -57,7 +57,7 @@ public class EpicHeist extends JavaPlugin implements Listener {
         this.setupPermissions();
         getServer().getPluginManager().registerEvents(new OnCommand(), this);
         getServer().getPluginManager().registerEvents(new RegionEventsListener(), this);
-        getServer().getPluginManager().registerEvents(new VaultRegionListener(), this);
+        getServer().getPluginManager().registerEvents(new HeistListeners(), this);
 
         Objects.requireNonNull(super.getCommand("heist")).setExecutor(new HeistCommand());
         match = new Match();
@@ -114,8 +114,6 @@ public class EpicHeist extends JavaPlugin implements Listener {
     public static Economy getEconomy() {
         return economy;
     }
-
-
     public ProtocolManager getProtocolManager() {
         return manager;
     }

@@ -1,10 +1,16 @@
 package mc.pnternn.epicheist.commands;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.game.Match;
 import mc.pnternn.epicheist.util.ColorUtil;
+import mc.pnternn.epicheist.util.PacketUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.command.Command;
@@ -12,12 +18,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.Color;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class HeistCommand implements CommandExecutor {
@@ -37,25 +45,8 @@ public class HeistCommand implements CommandExecutor {
                     EpicHeist.getMatch().stop();
                 }case "test" -> {
                     Player player = (Player) sender;
-                    Firework fw = (Firework)player.getWorld().spawn(player.getLocation(), Firework.class);
-                    FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(true).withColor(Color.GREEN).with(FireworkEffect.Type.BALL).build();
-                    FireworkMeta fwm = fw.getFireworkMeta();
-                    fwm.clearEffects();
-                    fwm.addEffect(effect);
-                    try {
-                        Field f = fwm.getClass().getDeclaredField("power");
-                        f.setAccessible(true);
-                        f.set(fwm, Integer.valueOf(-1));
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    fw.setFireworkMeta(fwm);
+                    Zombie zombie = (Zombie) player.getWorld().spawnEntity(player.getLocation(), org.bukkit.entity.EntityType.ZOMBIE);
+                    PacketUtils.hideEntity(Bukkit.getPlayer("test3"), zombie.getEntityId());
                 }case "crew" -> {
                     if (sender instanceof Player) {
                         Player p = (Player) sender;

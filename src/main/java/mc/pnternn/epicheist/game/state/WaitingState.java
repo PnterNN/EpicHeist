@@ -1,5 +1,6 @@
 package mc.pnternn.epicheist.game.state;
 
+import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.game.GameState;
 import mc.pnternn.epicheist.game.Match;
@@ -55,7 +56,11 @@ public class WaitingState extends GameState {
     }
     @Override
     public void onEnd() {
-
+        if(Bukkit.getOnlinePlayers().size() < 1){
+            Bukkit.broadcastMessage(ConfigurationHandler.getValue("prefix") + ConfigurationHandler.getValue("messages.not-enough-players"));
+            EpicHeist.setMatch(new Match());
+            EpicHeist.getMatch().start();
+        }
     }
     @Override
     protected void onStart() {
