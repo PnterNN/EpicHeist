@@ -1,5 +1,6 @@
 package mc.pnternn.epicheist.util;
 
+import mc.obliviate.util.string.StringUtil;
 import mc.pnternn.epicheist.EpicHeist;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -7,10 +8,6 @@ import org.bukkit.entity.Player;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class ColorUtil {
-    public static String colorize(String string) {
-        if(string== null) return null;
-        return string.replace("&", "\u00a7");
-    }
     public static void showTitle(Player player, String bcolor, String color, String name, String subname) {
         if (bcolor != color) {
             String[] nameArray = name.split("");
@@ -45,12 +42,12 @@ public abstract class ColorUtil {
                     if (x.get() > length * 2) {
                         x.set(1);
                     }
-                    player.sendTitle(colorize(nameDisplay[x.get()]), colorize(subname), 0, 5, 0);
+                    player.sendTitle(StringUtil.parseColor(nameDisplay[x.get()]), StringUtil.parseColor(subname), 0, 5, 0);
                 }, n);
             }
             player.sendTitle("", "", 0, 5, 0);
         } else {
-            player.sendTitle(colorize(color + "&l" + name), colorize(subname), 0, 5, 0);
+            player.sendTitle(StringUtil.parseColor(color + "&l" + name), StringUtil.parseColor(subname), 0, 5, 0);
         }
     }
 }

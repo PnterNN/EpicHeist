@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import mc.obliviate.util.string.StringUtil;
 import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.game.GameState;
@@ -16,9 +17,8 @@ import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.*;
 
@@ -27,7 +27,8 @@ public class DataHolder {
     protected GameState state;
     protected List<BlockState> goldBlocks = new ArrayList<>();
     protected List<BlockState> specialBlocks = new ArrayList<>();
-    protected List<BlockState> doorBlocks = new ArrayList<>();
+    protected List<BlockState> entranceDoorBlocks = new ArrayList<>();
+    protected List<BlockState> escapeDoorBlocks = new ArrayList<>();
     protected HashMap<UUID, Double> crewCollectedGold = new HashMap<>();
     protected HashMap<UUID, Double> crewCollectedMoney = new HashMap<>();
     protected HashMap<UUID, Double> collectedGold = new HashMap<UUID, Double>();
@@ -44,8 +45,13 @@ public class DataHolder {
                     if(block.getLocation().equals(location)){
 
                         event.getPlayer().sendBlockChange(location, Material.AIR.createBlockData());
+                        if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer() != null){
+                            EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer().sendBlockChange(location, Material.AIR.createBlockData());
+                        }
                         for(OfflinePlayer members : EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getMembers()){
-                            members.getPlayer().sendBlockChange(location, Material.AIR.createBlockData());
+                            if(members.getPlayer() != null){
+                                members.getPlayer().sendBlockChange(location, Material.AIR.createBlockData());
+                            }
                         }
                         Random random = new Random();
                         Integer money = 0;
@@ -67,17 +73,20 @@ public class DataHolder {
                                         money = random.nextInt(section.getInt("min"), section.getInt("max"));
                                     }
                                 }
-                                EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer().sendMessage(ColorUtil.colorize("&6" + event.getPlayer().getName() + " &ehas found a big gold block!"));
+                                if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer() !=null){
+                                    EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer().sendMessage(StringUtil.parseColor("&6" + event.getPlayer().getName() + " &ehas found a big gold block!"));
+                                }
                                 for(OfflinePlayer members : EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getMembers()){
-                                    members.getPlayer().sendMessage(ColorUtil.colorize("&6" + event.getPlayer().getName() + " &ehas found a big gold block!"));
+                                    if(members.getPlayer() != null){
+                                        members.getPlayer().sendMessage(StringUtil.parseColor("&6" + event.getPlayer().getName() + " &ehas found a big gold block!"));
+                                    }
                                 }
                             }
                         }
                         event.getPlayer().playSound(event.getPlayer().getLocation(), sound, 1, 1);
-
                         collectedGold.put(event.getPlayer().getUniqueId(), collectedGold.getOrDefault(event.getPlayer().getUniqueId(), 0.0) + 1);
                         collectedMoney.put(event.getPlayer().getUniqueId(), collectedMoney.getOrDefault(event.getPlayer().getUniqueId(), 0.0) + money);
-                        event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§6+" + money + " Money"));
+
                         EpicHeist.getEconomy().depositPlayer(event.getPlayer(), money);
                         if (EpicHeist.getInstance().getCrewManager().isInCrew(event.getPlayer())) {
                             crewCollectedGold.put(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getId(),
@@ -85,10 +94,17 @@ public class DataHolder {
                             crewCollectedMoney.put(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getId(),
                                     crewCollectedMoney.getOrDefault(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getId(), 0.0) + money);
                         }
+                        event.getPlayer().sendTitle(StringUtil.parseColor("&6+ "+money+"$"), StringUtil.parseColor("&7Toplamda "+collectedMoney.getOrDefault(event.getPlayer().getUniqueId(), 0.0)+" altın toparladın!"), 0, 10, 0);
                         Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
                             event.getPlayer().sendBlockChange(location, Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
+                            if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer() != null){
+                                EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getLeader().getPlayer().sendBlockChange(location, Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
+                            }
                             for(OfflinePlayer members : EpicHeist.getInstance().getCrewManager().getCrewByPlayer(event.getPlayer()).getMembers()){
-                                members.getPlayer().sendBlockChange(location, Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
+                                if(members.getPlayer() != null){
+                                    members.getPlayer().sendBlockChange(location, Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
+
+                                }
                             }
                         }, 20 * 30);
                     }
@@ -97,17 +113,35 @@ public class DataHolder {
         }
     };
     public void uninstall(){
+        for(Player player : EpicHeist.getMatch().getVaultPlayers()){
+            for(Player players : Bukkit.getOnlinePlayers()){
+                player.showPlayer(players);
+            }
+            player.teleport(ConfigurationHandler.getBankLocation());
+            ColorUtil.showTitle(player,
+                    ConfigurationHandler.getValue("animated-titles.heist-cancel.background-color"),
+                    ConfigurationHandler.getValue("animated-titles.heist-cancel.title-color"),
+                    ConfigurationHandler.getValue("animated-titles.heist-cancel.title"),
+                    ConfigurationHandler.getValue("animated-titles.heist-cancel.subtitle"));
+        }
         EpicHeist.getInstance().getProtocolManager().removePacketListener(goldBreakEvent);
 
         for (BlockState block : goldBlocks) {
             block.getBlock().setType(block.getType());
         }
-        goldBlocks.clear();
-
-        for (BlockState block : doorBlocks) {
+        for (BlockState block : entranceDoorBlocks) {
             block.getBlock().setType(block.getType());
         }
-        doorBlocks.clear();
+        for (BlockState block : escapeDoorBlocks) {
+            block.getBlock().setType(block.getType());
+        }
+        goldBlocks.clear();
+        entranceDoorBlocks.clear();
+        escapeDoorBlocks.clear();
+
+        playerSwats.forEach((uuid, zombies) -> {
+            zombies.forEach(Entity::remove);
+        });
     }
     public HashMap<UUID, List<Zombie>> getPlayerSwats() {
         return playerSwats;
@@ -115,8 +149,8 @@ public class DataHolder {
     public GameState getState() {
         return state;
     }
-    public List<BlockState> getDoorBlocks() {
-        return doorBlocks;
+    public List<BlockState> getEntranceDoorBlocks() {
+        return entranceDoorBlocks;
     }
     public int getDay() {
         return day;

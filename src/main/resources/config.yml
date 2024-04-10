@@ -1,48 +1,61 @@
 prefix: '&3Heist &8» '
 locations:
   swat-location:
-    x: 0
-    y: 0
-    z: 0
+    x: 0.0
+    y: 0.0
+    z: 0.0
     world: world
   bank-location:
-    x: 0
-    y: 0
-    z: 0
+    x: 0.0
+    y: 0.0
+    z: 0.0
     world: world
   jail-location:
-    x: 0
-    y: 0
-    z: 0
+    x: 0.0
+    y: 0.0
+    z: 0.0
     world: world
 regions:
   world-name: world
   vault-name: vault
-  door-name: door
+  entrance-door-name: heist_entrance_door
+  exit-door-name: heist_exit_door
+  teleport-region: heist_teleport_region
 timer:
   waiting-state:
-    time: '12:55:10'
-    week-day: 2 # 1 = Sunday, 2 = Monday, 3 = Tuesday, 4 = Wednesday, 5 = Thursday, 6 = Friday, 7 = Saturday
-    month-day: 27
-    loop: EVERYDAY # EVERYDAY, EVERYWEEK, EVERYMONTH
+    specific:
+      days: 0
+      hours: 0
+      minutes: 0
+      seconds: 30
+    time: '12:30:30'
+    week-day: 1 # 1 = Sunday, 2 = Monday, 3 = Tuesday, 4 = Wednesday, 5 = Thursday, 6 = Friday, 7 = Saturday
+    month-day: 15
+    loop: EVERYDAY # EVERYDAY, EVERYWEEK, EVERYMONTH, SPECIFIC
   starting-state:
     days: 0
     hours: 0
     minutes: 0
-    seconds: 12
+    seconds: 10
   playing-state:
     days: 0
     hours: 0
     minutes: 0
-    seconds: 10
+    seconds: 50
   swat-state:
     days: 0
     hours: 0
     minutes: 0
     seconds: 10
+  escaping-state:
+    days: 0
+    hours: 0
+    minutes: 0
+    seconds: 30
 messages:
   not-enough-players: '&cNot enough players to start the heist!'
-  gold-stealing-player: '&7you has stolen &e{gold} &7gold and &e{money} &7money from the vault!'
+  gold-stealing-player: '&7you has stolen &e{gold} &7gold and &e{money} &7money from
+    the vault!'
   most-gold-stealing-announcement:
     - '&6Top 3 Crews:'
     - ''
@@ -50,16 +63,32 @@ messages:
     - '&7&l {crew_2} &e{gold_2} Gold, {money_2}$ &7({percent_2} Gold/per player)'
     - '&7&l {crew_3} &e{gold_3} Gold, {money_3}$ &7({percent_3} Gold/per player)'
     - ''
+time-formats:
+  day: '{day} Gün {hour} Saat {minute} dk {second}sn'
+  hour: '{hour} Saat {minute} dk {second}sn'
+  minute: '{minute} dk {second}sn'
+  second: '{second}sn'
 musics:
-  starting-state: "epicheist:music.starting_state"
-  playing-state: ""
-  swat-state: "epicheist:swat.coming"
-  ending-state: "epicheist:music.ending_state"
-  catch: "epicheist:swat.elemination"
-  crew-1: "epicheist:rewards.crew1"
-  crew-2: "epicheist:rewards.crew1"
-  crew-3: "epicheist:rewards.crew1"
+  starting-state: epicheist:music.starting_state
+  playing-state: epicheist:music.playing_state
+  swat-state: epicheist:swat.coming
+  escaping-state: epicheist:music.escaping_state
+  ending-state: epicheist:music.ending_state
+  gold-steal: epicheist:gold.steal
+  gold-steal-big: epicheist:gold.steal_big
+  catch: epicheist:swat.elemination
+  crew-1: epicheist:rewards.crew1
+  crew-2: epicheist:rewards.crew2
+  crew-3: epicheist:rewards.crew3
+bossbar:
+  title: '{OWN_CREW_PERCENT}% Gold / {FIRST_CREW_PERCENT}% Gold'
+  color: YELLOW
 animated-titles:
+  heist-cancel:
+    title: HEIST CANCELLED
+    subtitle: The heist has been cancelled!
+    background-color: '&7'
+    title-color: '&c'
   catch-title:
     title: YOU CAUGHT
     subtitle: Half the money was taken!
@@ -80,46 +109,58 @@ animated-titles:
     subtitle: run away from the SWAT team!
     background-color: '&7'
     title-color: '&e'
+  escaping-state:
+    title: ESCAPE
+    subtitle: Run to the exploded gate!
+    background-color: '&7'
+    title-color: '&e'
+  successfully-escaped:
+    title: ESCAPE SUCCESS
+    subtitle: You have successfully escaped!
+    background-color: '&7'
+    title-color: '&e'
   ending-state:
     title: HEIST ENDED
-    subtitle: You escaped successfully!
+    subtitle: The heist has ended!
     background-color: '&7'
     title-color: '&e'
 gold:
   big-gold:
     block: RAW_GOLD_BLOCK
     chance: 1
-    sound: "epicheist:gold.steal_big"
+    sound: epicheist:gold.steal_big
     money:
       default:
-        permission: "epicheist.default"
+        permission: epicheist.default
         min: 100
         max: 200
       vip:
-        permission: "epicheist.vip"
+        permission: epicheist.vip
         min: 200
         max: 400
   small-gold:
     block: GOLD_BLOCK
-    sound: "epicheist:gold.steal"
+    sound: epicheist:gold.steal
     money:
       default:
-        permission: "epicheist.default"
+        permission: epicheist.default
         min: 10
         max: 20
       vip:
-        permission: "epicheist.vip"
+        permission: epicheist.vip
         min: 20
         max: 40
 swat:
-  name: "&1SWAT"
-  amount: 2 #per player
-  speed: 0.3
+  name: '&1SWAT'
+  amount: 2 # per player
+  speed-level: 1
   jump: 0.5
   armor:
     helmet: DIAMOND_HELMET
     chestplate: DIAMOND_CHESTPLATE
     leggings: DIAMOND_LEGGINGS
     boots: DIAMOND_BOOTS
-
-
+rewards:
+  1: []
+  2: []
+  3: []

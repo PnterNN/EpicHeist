@@ -39,6 +39,11 @@ public class WaitingState extends GameState {
                     timePeriod = timePeriod.plusMonths(1);
                 }
                 return Duration.between(startingTime, timePeriod);
+            }case "SPECIFIC" ->{
+                return Duration.ofSeconds(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.specific.seconds")))
+                        .plusMinutes(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.specific.minutes")))
+                        .plusHours(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.specific.hours")))
+                        .plusDays(Integer.parseInt(ConfigurationHandler.getValue("timer.waiting-state.specific.days")));
             }
         }
         return Duration.ZERO;
@@ -56,11 +61,7 @@ public class WaitingState extends GameState {
     }
     @Override
     public void onEnd() {
-        if(Bukkit.getOnlinePlayers().size() < 1){
-            Bukkit.broadcastMessage(ConfigurationHandler.getValue("prefix") + ConfigurationHandler.getValue("messages.not-enough-players"));
-            EpicHeist.setMatch(new Match());
-            EpicHeist.getMatch().start();
-        }
+
     }
     @Override
     protected void onStart() {

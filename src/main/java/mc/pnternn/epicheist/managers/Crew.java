@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -71,6 +72,15 @@ public class Crew {
         return this.leader;
     }
 
+    public List<Player> getOnlineMembers() {
+        List<Player> onlineMembers = new ArrayList<>();
+        for(OfflinePlayer player : this.members){
+            if(player.isOnline()){
+                onlineMembers.add(player.getPlayer());
+            }
+        }
+        return onlineMembers;
+    }
     public List<OfflinePlayer> getMembers() {
         return this.members;
     }

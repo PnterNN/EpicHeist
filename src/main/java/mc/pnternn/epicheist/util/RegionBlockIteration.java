@@ -4,6 +4,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import mc.pnternn.epicheist.config.ConfigurationHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -29,5 +30,12 @@ public class RegionBlockIteration {
             }
         }
         return locations;
+    }
+    public static int getVaultRegionMinimumY() {
+        World world = Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name"));
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
+        ProtectedRegion region = regionManager.getRegion(ConfigurationHandler.getValue("regions.vault-name"));
+        assert region != null;
+        return region.getMinimumPoint().getBlockY();
     }
 }

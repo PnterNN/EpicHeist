@@ -5,6 +5,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import mc.obliviate.util.string.StringUtil;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import mc.pnternn.epicheist.util.ColorUtil;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class OnCommand implements Listener {
             if (region.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())){
                 if(!player.hasPermission("epicheist.admin")){
                     event.setCancelled(true);
-                    player.sendMessage(ColorUtil.colorize(ConfigurationHandler.getValue("prefix") + "&cyou can't use commands inside the vault!"));
+                    player.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cyou can't use commands inside the vault!"));
                 }
             }
         }

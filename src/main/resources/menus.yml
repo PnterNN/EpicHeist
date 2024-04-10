@@ -1,0 +1,209 @@
+admin-panel-gui:
+  title: '&0Soygun Admin Paneli'
+  row: 4
+  icons:
+    filler-item:
+      display-name: ' '
+      material: BLACK_STAINED_GLASS_PANE
+      slot: 0-8
+    locations:
+      display-name: '&6&lLokasyonlar'
+      material: COMPASS
+      slot: 20
+      lore:
+        - '&r'
+        - '&7Belirlemeniz gereken lokasyonlar'
+        - '&7bu menüde yer alır.'
+        - '&r'
+        - '&e► &f/heist locations'
+        - '&r'
+        - '&aTıkla ve aç!'
+    rewards:
+      display-name: '&6&lÖdüller'
+      material: CAULDRON
+      slot: 22
+      lore:
+        - '&r'
+        - '&7Soygun etkinliği için'
+        - '&7belirli ödülleri ayarlar'
+        - '&r'
+        - '&e► &f/heist rewards'
+        - '&r'
+        - '&aTıkla ve aç!'
+admin-panel-gui-locations:
+  title: '&0Soygun &8> Lokasyonlar'
+  row: 4
+  icons:
+    filler-item:
+      display-name: ' '
+      material: BLACK_STAINED_GLASS_PANE
+      slot: 0-8
+    back-menu:
+      display-name: '&cGeri dön'
+      material: ARROW
+      slot: 0
+      lore:
+        - '&7Ana menüye dönün.'
+    bank-spawn-location:
+      display-name: '&6&nBanka başlangıç lokasyonu'
+      material: GOLD_BLOCK
+      slot: 20
+      lore:
+        - '&r'
+        - '&7Oyuncular /banka yazdıklarında,'
+        - '&7ışınlanacakları lokasyon.'
+        - '&r'
+        - '&e► &f/heist setBankSpawn'
+        - '&r'
+        - '&aSol-Tık ile ayarlayın'
+        - '&aSağ-Tık ile ışınlanın!'
+    jail-spawn-location:
+      display-name: '&6&nHapis başlangıç lokasyonu'
+      material: IRON_BARS
+      slot: 22
+      lore:
+        - '&r'
+        - '&7Oyuncular özel time yakalandığında,'
+        - '&7ışınlanacakları lokasyon.'
+        - '&r'
+        - '&e► &f/heist setJailSpawn'
+        - '&r'
+        - '&aSol-Tık ile ayarlayın'
+        - '&aSağ-Tık ile ışınlanın!'
+    swat-spawn-location:
+      display-name: '&6&nÖzel tim başlangıç lokasyonu'
+      material: ZOMBIE_HEAD
+      slot: 24
+      lore:
+        - '&r'
+        - '&7Özel timin doğacağı lokasyon'
+        - '&r'
+        - '&e► &f/heist setSwatSpawn'
+        - '&r'
+        - '&aSol-Tık ile ayarlayın'
+        - '&aSağ-Tık ile ışınlanın!'
+admin-panel-gui-rewards:
+  title: '&0Soygun &8> Ödüller'
+  row: 4
+  icons:
+    filler-item:
+      display-name: ' '
+      material: BLACK_STAINED_GLASS_PANE
+      slot: 0-8
+    back-menu:
+      display-name: '&cGeri dön'
+      material: ARROW
+      slot: 0
+      lore:
+        - '&7Ana menüye dönün.'
+    first-crew:
+      display-name: '&6&n1. Soyguncu takımı'
+      material: TORCH
+      slot: 20
+      lore:
+        - '&r'
+        - '&7En çok altın toplayan,'
+        - '&71. takım ödüllerini ayarlayın'
+        - '&r'
+        - '&e► &f/heist setreward 1'
+        - '&r'
+        - '&aSol-Tık ile ayarlayın'
+        - '&aSağ-Tık ile ödüllere bakın!'
+    second-crew:
+      display-name: '&6&n2. Soyguncu takımı'
+      material: REDSTONE_TORCH
+      slot: 22
+      lore:
+        - '&r'
+        - '&7En çok altın toplayan,'
+        - '&72. takım ödüllerini ayarlayın'
+        - '&r'
+        - '&e► &f/heist setreward 2'
+        - '&r'
+        - '&aSol-Tık ile ayarlayın'
+        - '&aSağ-Tık ile ödüllere bakın!'
+    third-crew:
+      display-name: '&6&n3. Soyguncu takımı'
+      material: SOUL_TORCH
+      slot: 24
+      lore:
+        - '&r'
+        - '&7En çok altın toplayan,'
+        - '&73. takım ödüllerini ayarlayın'
+        - '&r'
+        - '&e► &f/heist setreward 3'
+        - '&r'
+        - '&aSol-Tık ile ayarlayın'
+        - '&aSağ-Tık ile ödüllere bakın!'
+admin-panel-gui-rewards-first:
+  title: '&0Soygun &8> Ödüller > 1'
+  row: 6
+  icons:
+    filler-item:
+      display-name: ' '
+      material: BLACK_STAINED_GLASS_PANE
+      slot: 0-8
+    back-menu:
+      display-name: '&cGeri dön'
+      material: ARROW
+      slot: 0
+      lore:
+        - '&7Ödüller menüsüne dönün.'
+    save-item:
+      display-name: '&a&lKaydet'
+      material: EMERALD_BLOCK
+      slot: 4
+      lore:
+        - '&r'
+        - '&7En çok altın toplayan,'
+        - '&71. takımın ödüllerini ayarlayın.'
+        - '&r'
+        - '&aSol-Tık ile kaydet'
+admin-panel-gui-rewards-second:
+  title: '&0Soygun &8> Ödüller > 2'
+  row: 6
+  icons:
+    filler-item:
+      display-name: ' '
+      material: BLACK_STAINED_GLASS_PANE
+      slot: 0-8
+    back-menu:
+      display-name: '&cGeri dön'
+      material: ARROW
+      slot: 0
+      lore:
+        - '&7Ödüller menüsüne dönün.'
+    save-item:
+      display-name: '&a&lKaydet'
+      material: EMERALD_BLOCK
+      slot: 4
+      lore:
+        - '&r'
+        - '&7En çok altın toplayan,'
+        - '&72. takımın ödüllerini ayarlayın.'
+        - '&r'
+        - '&aSol-Tık ile kaydet'
+admin-panel-gui-rewards-third:
+  title: '&0Soygun &8> Ödüller > 3'
+  row: 6
+  icons:
+    filler-item:
+      display-name: ' '
+      material: BLACK_STAINED_GLASS_PANE
+      slot: 0-8
+    back-menu:
+      display-name: '&cGeri dön'
+      material: ARROW
+      slot: 0
+      lore:
+        - '&7Ödüller menüsüne dönün.'
+    save-item:
+      display-name: '&a&lKaydet'
+      material: EMERALD_BLOCK
+      slot: 4
+      lore:
+        - '&r'
+        - '&7En çok altın toplayan,'
+        - '&73. takımın ödüllerini ayarlayın.'
+        - '&r'
+        - '&aSol-Tık ile kaydet'

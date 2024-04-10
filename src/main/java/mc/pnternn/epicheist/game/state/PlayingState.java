@@ -18,7 +18,6 @@ public class PlayingState extends GameState {
     public PlayingState(Match match) {
         super(match);
     }
-
     @NotNull
     @Override
     public Duration getDuration() {
@@ -34,6 +33,8 @@ public class PlayingState extends GameState {
         getMatch().getDataHolder().hour = (getRemainingDuration().toHoursPart());
         getMatch().getDataHolder().minute = (getRemainingDuration().toMinutesPart());
         getMatch().getDataHolder().second = (getRemainingDuration().toSecondsPart());
+
+
         if (getRemainingDuration().toSeconds() == 0) {
             getMatch().getStateseries().skip();
         }
@@ -68,8 +69,8 @@ public class PlayingState extends GameState {
                 location.getBlock().setType(Material.AIR);
             }
         }
-        for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.door-name"))) {;
-            getMatch().getDataHolder().doorBlocks.add(location.getBlock().getState());
+        for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.entrance-door-name"))) {;
+            getMatch().getDataHolder().entranceDoorBlocks.add(location.getBlock().getState());
             location.getBlock().setType(Material.AIR);
             Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name")).createExplosion(location, 0F, false, false);
         }

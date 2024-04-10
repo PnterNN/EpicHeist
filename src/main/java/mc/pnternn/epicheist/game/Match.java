@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Match {
     private final MatchTaskManager matchTaskManager = new MatchTaskManager();
@@ -25,7 +26,8 @@ public class Match {
                 new WaitingState(this),
                 new StartingState(this),
                 new PlayingState(this),
-                new SwatState(this)
+                new SwatState(this),
+                new EscapingState(this)
         );
     }
     public void start(){
@@ -41,9 +43,9 @@ public class Match {
     public List<Player> getVaultPlayers(){
         List<Player> players = new ArrayList<>();
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name"))));
+        RegionManager regions = container.get(BukkitAdapter.adapt(Objects.requireNonNull(Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name")))));
         for (Player player: Bukkit.getOnlinePlayers()){
-            if(regions.getRegion(ConfigurationHandler.getValue("regions.vault-name")).
+            if(Objects.requireNonNull(Objects.requireNonNull(regions).getRegion(ConfigurationHandler.getValue("regions.vault-name"))).
                     contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())){
                 players.add(player);
             }

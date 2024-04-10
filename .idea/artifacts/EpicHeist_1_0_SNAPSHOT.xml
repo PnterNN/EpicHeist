@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="EpicHeist-1.0-SNAPSHOT">
-    <output-path>$USER_HOME$/Desktop/GrandSkyblock/plugins</output-path>
+    <output-path>$USER_HOME$/Desktop/Skyblock/spawn/plugins</output-path>
     <root id="archive" name="EpicHeist-1.0-SNAPSHOT.jar">
       <element id="module-output" name="EpicHeist" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/Kloggs/-6d3735f72e-1/Kloggs--6d3735f72e-1.jar" path-in-jar="/" />
@@ -23,6 +23,13 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4/kotlin-stdlib-1.1.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/20.1.0/annotations-20.1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-invs/advancedslot/4.3.0/advancedslot-4.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-invs/configurablegui/4.3.0/configurablegui-4.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-invs/pagination/4.3.0/pagination-4.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/placeholder/2.0.5/placeholder-2.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/string/2.0.5/string-2.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/version-detection/2.0.5/version-detection-2.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/hamza-cskn/obliviate-utils/2.0.5/obliviate-utils-2.0.5.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

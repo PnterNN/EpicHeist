@@ -57,6 +57,7 @@ public class RegionEventsListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+
         updateRegions(e.getPlayer(), MovementWay.SPAWN, e.getPlayer().getLocation(), (PlayerEvent)e);
     }
 

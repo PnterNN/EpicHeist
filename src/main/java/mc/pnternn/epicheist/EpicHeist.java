@@ -2,6 +2,8 @@ package mc.pnternn.epicheist;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import mc.obliviate.inventory.InventoryAPI;
+import mc.obliviate.inventory.configurable.GuiConfigurationTable;
 import mc.pnternn.epicheist.listeners.RegionEventsListener;
 import mc.pnternn.epicheist.listeners.HeistListeners;
 import mc.pnternn.epicheist.expansions.HeistPlaceholder;
@@ -15,6 +17,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -43,7 +46,6 @@ public class EpicHeist extends JavaPlugin implements Listener {
             }
         }
 
-
         manager = ProtocolLibrary.getProtocolManager();
         configurationHandler.init();
         this.getLogger().info("EpicHeist created by PnterNN");
@@ -60,8 +62,20 @@ public class EpicHeist extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new HeistListeners(), this);
 
         Objects.requireNonNull(super.getCommand("heist")).setExecutor(new HeistCommand());
+        loadGuis();
         match = new Match();
         match.start();
+    }
+
+    private void loadGuis() {
+        new InventoryAPI(this).init();
+
+        YamlConfiguration section = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "menus.yml"));
+        if (section.getKeys(false).isEmpty()) {
+            saveResource("menus.yml", true);
+            section = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "menus.yml"));
+        }
+        GuiConfigurationTable.setDefaultConfigurationTable(new GuiConfigurationTable(section));
     }
 
     private void setupPlaceholderAPI() {
