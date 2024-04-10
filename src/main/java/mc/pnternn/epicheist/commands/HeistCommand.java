@@ -102,17 +102,21 @@ public class HeistCommand implements CommandExecutor {
                                 }case "invite" -> {
                                     if (EpicHeist.getInstance().getCrewManager().isInCrew(p)) {
                                         if (EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getLeader().equals(p)) {
-                                            Player target = Bukkit.getPlayer(args[2]);
-                                            if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getMembers().contains(target)){
-                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cPlayer is already in the crew!"));
-                                                return false;
-                                            }
-                                            if (target != null) {
-                                                EpicHeist.getInstance().getCrewManager().addPendingInvite(target, EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p));
-                                                target.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aYou have been invited to a crew!"));
-                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aInvite sent!"));
-                                            } else {
-                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cPlayer not found!"));
+                                            if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getMembers().size() <5){
+                                                Player target = Bukkit.getPlayer(args[2]);
+                                                if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getMembers().contains(target)){
+                                                    p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cPlayer is already in the crew!"));
+                                                    return false;
+                                                }
+                                                if (target != null) {
+                                                    EpicHeist.getInstance().getCrewManager().addPendingInvite(target, EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p));
+                                                    target.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aYou have been invited to a crew!"));
+                                                    p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aInvite sent!"));
+                                                } else {
+                                                    p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cPlayer not found!"));
+                                                }
+                                            }else{
+                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cCrew is full!"));
                                             }
                                         } else {
                                             p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cYou are not the leader of the crew!"));
@@ -140,9 +144,13 @@ public class HeistCommand implements CommandExecutor {
                                 }case "accept" -> {
                                     if(!EpicHeist.getInstance().getCrewManager().isInCrew(p)){
                                         if (EpicHeist.getInstance().getCrewManager().hasPendingInvite(p, EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()))){
-                                            EpicHeist.getInstance().getCrewManager().addMember(p, EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()));
-                                            EpicHeist.getInstance().getCrewManager().getPendingInvites().remove(p.getUniqueId());
-                                            p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aYou have joined the crew!"));
+                                            if(EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()).getMembers().size() <5){
+                                                EpicHeist.getInstance().getCrewManager().addMember(p, EpicHeist.getInstance().getCrewManager().getPendingInvites().get(p.getUniqueId()));
+                                                EpicHeist.getInstance().getCrewManager().getPendingInvites().remove(p.getUniqueId());
+                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aYou have joined the crew!"));
+                                            }else{
+                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cCrew is full!"));
+                                            }
                                         } else {
                                             p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cYou have no pending invites!"));
                                         }
