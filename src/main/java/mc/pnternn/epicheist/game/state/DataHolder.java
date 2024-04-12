@@ -164,6 +164,34 @@ public class DataHolder {
     public int getSecond() {
         return second;
     }
+    public String getTime(){
+        DataHolder dataHolder = EpicHeist.getMatch().getDataHolder();
+        if(dataHolder.getDay()>0){
+            return ConfigurationHandler.getValue("time-formats.day").replace("{day}", String.valueOf(dataHolder.getDay()))
+                    .replace("{hour}", String.valueOf(dataHolder.getHour()))
+                    .replace("{minute}", String.valueOf(dataHolder.getMinute()))
+                    .replace("{second}", String.valueOf(dataHolder.getSecond()));
+        }
+        else if(dataHolder.getHour()> 0){
+            return ConfigurationHandler.getValue("time-formats.hour").replace("{day}", String.valueOf(dataHolder.getDay()))
+                    .replace("{hour}", String.valueOf(dataHolder.getHour()))
+                    .replace("{minute}", String.valueOf(dataHolder.getMinute()))
+                    .replace("{second}", String.valueOf(dataHolder.getSecond()));
+        }
+        else if(dataHolder.getMinute()>0){
+            return ConfigurationHandler.getValue("time-formats.minute").replace("{day}", String.valueOf(dataHolder.getDay()))
+                    .replace("{hour}", String.valueOf(dataHolder.getHour()))
+                    .replace("{minute}", String.valueOf(dataHolder.getMinute()))
+                    .replace("{second}", String.valueOf(dataHolder.getSecond()));
+        }
+        else if(dataHolder.getSecond()>0){
+            return ConfigurationHandler.getValue("time-formats.second").replace("{day}", String.valueOf(dataHolder.getDay()))
+                    .replace("{hour}", String.valueOf(dataHolder.getHour()))
+                    .replace("{minute}", String.valueOf(dataHolder.getMinute()))
+                    .replace("{second}", String.valueOf(dataHolder.getSecond()));
+        }
+        return "...";
+    }
     public HashMap<UUID, Double> getCrewCollectedGold() {
         return crewCollectedGold;
     }

@@ -34,7 +34,6 @@ public class PlayingState extends GameState {
         getMatch().getDataHolder().minute = (getRemainingDuration().toMinutesPart());
         getMatch().getDataHolder().second = (getRemainingDuration().toSecondsPart());
 
-
         if (getRemainingDuration().toSeconds() == 0) {
             getMatch().getStateseries().skip();
         }
@@ -54,35 +53,36 @@ public class PlayingState extends GameState {
                     ConfigurationHandler.getValue("animated-titles.playing-state.subtitle"));
         }
         getMatch().getDataHolder().state = this;
-        EpicHeist.getInstance().getProtocolManager().addPacketListener(getMatch().getDataHolder().goldBreakEvent);
-
-        RegionBlockIteration regionBlockIteration = new RegionBlockIteration();
-        for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.vault-name"))) {
-            if(location.getBlock().getType() == Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block"))){
-                Random random = new Random();
-                if(random.nextInt(0,100)<Integer.parseInt(ConfigurationHandler.getValue("gold.big-gold.chance"))){
-                    getMatch().getDataHolder().specialBlocks.add(location.getBlock().getState());
-                    getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
-                }else{
-                    getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
+        if(ConfigurationHandler.getValue("main-server").equals("true")){
+            EpicHeist.getInstance().getProtocolManager().addPacketListener(getMatch().getDataHolder().goldBreakEvent);
+            RegionBlockIteration regionBlockIteration = new RegionBlockIteration();
+            for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.vault-name"))) {
+                if(location.getBlock().getType() == Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block"))){
+                    Random random = new Random();
+                    if(random.nextInt(0,100)<Integer.parseInt(ConfigurationHandler.getValue("gold.big-gold.chance"))){
+                        getMatch().getDataHolder().specialBlocks.add(location.getBlock().getState());
+                        getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
+                    }else{
+                        getMatch().getDataHolder().goldBlocks.add(location.getBlock().getState());
+                    }
+                    location.getBlock().setType(Material.AIR);
                 }
+            }
+            for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.entrance-door-name"))) {;
+                getMatch().getDataHolder().entranceDoorBlocks.add(location.getBlock().getState());
                 location.getBlock().setType(Material.AIR);
+                Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name")).createExplosion(location, 0F, false, false);
             }
-        }
-        for (Location location : regionBlockIteration.getRegionBlocks(ConfigurationHandler.getValue("regions.world-name"), ConfigurationHandler.getValue("regions.entrance-door-name"))) {;
-            getMatch().getDataHolder().entranceDoorBlocks.add(location.getBlock().getState());
-            location.getBlock().setType(Material.AIR);
-            Bukkit.getWorld(ConfigurationHandler.getValue("regions.world-name")).createExplosion(location, 0F, false, false);
-        }
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                for(BlockState block : getMatch().getDataHolder().goldBlocks){
-                    player.sendBlockChange(block.getLocation(), Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    for(BlockState block : getMatch().getDataHolder().goldBlocks){
+                        player.sendBlockChange(block.getLocation(), Material.getMaterial(ConfigurationHandler.getValue("gold.small-gold.block")).createBlockData());
+                    }
+                    for(BlockState block : getMatch().getDataHolder().specialBlocks){
+                        player.sendBlockChange(block.getLocation(), Material.getMaterial(ConfigurationHandler.getValue("gold.big-gold.block")).createBlockData());
+                    }
                 }
-                for(BlockState block : getMatch().getDataHolder().specialBlocks){
-                    player.sendBlockChange(block.getLocation(), Material.getMaterial(ConfigurationHandler.getValue("gold.big-gold.block")).createBlockData());
-                }
-            }
-        }, 5L);
+            }, 5L);
+        }
     }
 }

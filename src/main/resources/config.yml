@@ -1,4 +1,11 @@
 prefix: '&3Heist &8» '
+main-server: true #IF REDIS FALSE MUST BE TRUE
+redis:
+  enabled: false
+  host: '127.0.0.1'
+  port: 6379
+  channel: 'epicheist'
+  password: ''
 locations:
   swat-location:
     x: 0.0

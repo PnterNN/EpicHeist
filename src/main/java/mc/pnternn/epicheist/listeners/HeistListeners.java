@@ -222,7 +222,7 @@ public class HeistListeners implements Listener {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(player.getWorld()));
         if(regions != null){
-            if(Objects.requireNonNull(regions.getRegion(ConfigurationHandler.getValue("regions.vault-name"))).
+            if(regions.getRegion(ConfigurationHandler.getValue("regions.vault-name")).
                     contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ())){
                 player.teleport(ConfigurationHandler.getBankLocation());
             }

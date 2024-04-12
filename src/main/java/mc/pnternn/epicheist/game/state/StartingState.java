@@ -30,6 +30,7 @@ public class StartingState extends GameState {
         getMatch().getDataHolder().hour = (getRemainingDuration().toHoursPart());
         getMatch().getDataHolder().minute = (getRemainingDuration().toMinutesPart());
         getMatch().getDataHolder().second = (getRemainingDuration().toSecondsPart());
+
         if(getRemainingDuration().toSeconds() == 0){
             getMatch().getStateseries().skip();
         }
@@ -43,17 +44,19 @@ public class StartingState extends GameState {
         getMatch().getDataHolder().state = this;
         if(Bukkit.getOnlinePlayers().size() < 1){
             Bukkit.broadcastMessage(ConfigurationHandler.getValue("prefix") + ConfigurationHandler.getValue("messages.not-enough-players"));
-            EpicHeist.setMatch(new Match());
-            EpicHeist.getMatch().start();
-        }
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.starting-state"), 1, 1);
-            ColorUtil.showTitle(player,
-                    ConfigurationHandler.getValue("animated-titles.starting-state.background-color"),
-                    ConfigurationHandler.getValue("animated-titles.starting-state.title-color"),
-                    ConfigurationHandler.getValue("animated-titles.starting-state.title"),
-                    ConfigurationHandler.getValue("animated-titles.starting-state.subtitle"));
+            if(ConfigurationHandler.getValue("main-server").equals("true")){
+                EpicHeist.setMatch(new Match());
+                EpicHeist.getMatch().start();
+            }
+        }else{
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), ConfigurationHandler.getValue("musics.starting-state"), 1, 1);
+                ColorUtil.showTitle(player,
+                        ConfigurationHandler.getValue("animated-titles.starting-state.background-color"),
+                        ConfigurationHandler.getValue("animated-titles.starting-state.title-color"),
+                        ConfigurationHandler.getValue("animated-titles.starting-state.title"),
+                        ConfigurationHandler.getValue("animated-titles.starting-state.subtitle"));
+            }
         }
     }
 

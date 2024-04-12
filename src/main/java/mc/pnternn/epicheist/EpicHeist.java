@@ -4,6 +4,11 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import mc.obliviate.inventory.InventoryAPI;
 import mc.obliviate.inventory.configurable.GuiConfigurationTable;
+import mc.pnternn.epicheist.game.GameState;
+import mc.pnternn.epicheist.game.state.EscapingState;
+import mc.pnternn.epicheist.game.state.PlayingState;
+import mc.pnternn.epicheist.game.state.SwatState;
+import mc.pnternn.epicheist.game.state.WaitingState;
 import mc.pnternn.epicheist.listeners.RegionEventsListener;
 import mc.pnternn.epicheist.listeners.HeistListeners;
 import mc.pnternn.epicheist.expansions.HeistPlaceholder;
@@ -13,6 +18,7 @@ import mc.pnternn.epicheist.game.Match;
 import mc.pnternn.epicheist.listeners.OnCommand;
 import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.managers.CrewManager;
+import mc.pnternn.epicheist.managers.RedisManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -22,6 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Objects;
@@ -34,6 +41,7 @@ public class EpicHeist extends JavaPlugin implements Listener {
     private static Match match;
     private ProtocolManager manager;
     private CrewManager crewManager;
+    private RedisManager redisManager;
 
     @Override
     public void onEnable() {
@@ -57,14 +65,25 @@ public class EpicHeist extends JavaPlugin implements Listener {
         }
         this.setupPlaceholderAPI();
         this.setupPermissions();
-        getServer().getPluginManager().registerEvents(new OnCommand(), this);
-        getServer().getPluginManager().registerEvents(new RegionEventsListener(), this);
-        getServer().getPluginManager().registerEvents(new HeistListeners(), this);
+        if(ConfigurationHandler.getValue("main-server").equals("true")){
+            getServer().getPluginManager().registerEvents(new OnCommand(), this);
+            getServer().getPluginManager().registerEvents(new RegionEventsListener(), this);
+            getServer().getPluginManager().registerEvents(new HeistListeners(), this);
+        }
 
         Objects.requireNonNull(super.getCommand("heist")).setExecutor(new HeistCommand());
         loadGuis();
-        match = new Match();
-        match.start();
+        if(ConfigurationHandler.getValue("redis.enabled").equalsIgnoreCase("true")){
+            redisManager = new RedisManager(ConfigurationHandler.getValue("redis.host"), Integer.parseInt(ConfigurationHandler.getValue("redis.port")));
+        }
+        if(ConfigurationHandler.getValue("main-server").equals("true")){
+            match = new Match();
+            match.start();
+        }else{
+            JSONObject obj = new JSONObject();
+            obj.put("type", "SEND_TIMER");
+            redisManager.publish(ConfigurationHandler.getValue("redis.channel"), obj);
+        }
     }
 
     private void loadGuis() {
@@ -89,6 +108,9 @@ public class EpicHeist extends JavaPlugin implements Listener {
     }
     @Override
     public void onDisable() {
+        if(redisManager != null){
+            redisManager.close();
+        }
         if(match != null){
             EpicHeist.getMatch().stop();
         }
@@ -112,6 +134,9 @@ public class EpicHeist extends JavaPlugin implements Listener {
     }
 
 
+    public RedisManager getRedisManager() {
+        return redisManager;
+    }
     public CrewManager getCrewManager() {
         return crewManager;
     }

@@ -12,6 +12,7 @@ import net.minikloon.fsmgasm.StateSeries;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,18 @@ public class Match {
     public void start(){
         stateseries.start();
         matchTaskManager.repeatTask("heart-beat", stateseries::update,19);
+        if(ConfigurationHandler.getValue("main-server").equals("true")){
+            Bukkit.getScheduler().scheduleSyncDelayedTask(EpicHeist.getInstance(), () -> {
+                JSONObject timerObj = new JSONObject();
+                timerObj.put("type", "TIMER_START");
+                timerObj.put("days", dataHolder.getDay());
+                timerObj.put("hours", dataHolder.getHour());
+                timerObj.put("minutes", dataHolder.getMinute());
+                timerObj.put("seconds", dataHolder.getSecond());
+                EpicHeist.getInstance().getRedisManager().publish(ConfigurationHandler.getValue("redis.channel"), timerObj);
+            }, 20);
+        }
+
     }
     public void stop(){
         stateseries.end();
