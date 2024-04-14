@@ -14,6 +14,7 @@ import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.util.ColorUtil;
 import mc.pnternn.epicheist.util.RegionBlockIteration;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -135,6 +136,9 @@ public class HeistListeners implements Listener {
         String regionName = event.getRegion().getId();
         if(regionName.contains(ConfigurationHandler.getValue("regions.vault-name")))
         {
+            if(!player.isOp()){
+                player.setGameMode(GameMode.SURVIVAL);
+            }
             if(!EpicHeist.getInstance().getCrewManager().isInCrew(player)){
                 player.sendMessage(StringUtil.parseColor("&cSince there is no crew, a new crew was created."));
                 EpicHeist.getInstance().getCrewManager().addCrew(new Crew(player, new ArrayList()));
@@ -171,6 +175,9 @@ public class HeistListeners implements Listener {
         String regionName = event.getRegion().getId();
         if(regionName.contains(ConfigurationHandler.getValue("regions.vault-name")))
         {
+            if(!player.isOp()){
+                player.setGameMode(GameMode.ADVENTURE);
+            }
             for(Player p : Bukkit.getOnlinePlayers())
             {
                 p.showPlayer(player);
