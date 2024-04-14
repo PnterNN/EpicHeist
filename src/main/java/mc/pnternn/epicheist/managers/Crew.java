@@ -88,6 +88,15 @@ public class Crew {
     public OfflinePlayer getLeader() {
         return this.leader;
     }
+    public void setLeader(OfflinePlayer paramPlayer) {
+        this.leader = paramPlayer;
+        if(!ConfigurationHandler.getValue("sql.enabled").equals("true")) {
+            this.crewFile.set("leader", paramPlayer.getUniqueId().toString());
+            saveConfig();
+        }else{
+            EpicHeist.getInstance().getMySql().setLeader(this.id.toString(), paramPlayer.getUniqueId().toString());
+        }
+    }
 
     public List<Player> getOnlineMembers() {
         List<Player> onlineMembers = new ArrayList<>();

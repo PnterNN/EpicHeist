@@ -11,6 +11,8 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
+import java.util.UUID;
+
 public class RedisManager {
     Jedis jedis;
     Thread redisThread;
@@ -50,7 +52,9 @@ public class RedisManager {
                                     timerObj.put("seconds", EpicHeist.getMatch().getDataHolder().getSecond());
                                     publish(ConfigurationHandler.getValue("redis.channel"), timerObj);
                                 }
-                            }
+                            }else if(obj.get("type").toString().equals("FETCH_DATA")) {
+                                EpicHeist.getInstance().getCrewManager().setCrewList(EpicHeist.getInstance().getMySql().getCrews());
+                            }//TODO: Add other types
                         }
                     }
                 }, ConfigurationHandler.getValue("redis.channel"));

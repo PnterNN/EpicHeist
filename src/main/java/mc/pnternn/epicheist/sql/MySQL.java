@@ -49,6 +49,15 @@ public class MySQL {
             Bukkit.getLogger().severe("Could not delete crew: " + e.getMessage());
         }
     }
+    public void setLeader(String id, String leader) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("UPDATE crews SET leader='" + leader + "' WHERE id='" + id + "'");
+            statement.close();
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe("Could not set leader: " + e.getMessage());
+        }
+    }
     public void addMember(String id, String member) {
         try {
             Statement statement = connection.createStatement();

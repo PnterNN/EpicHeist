@@ -219,6 +219,13 @@ public class HeistListeners implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
+        EpicHeist.getInstance().getCrewManager().getCrewList().forEach(crew -> {
+            if(crew.getLeader().getUniqueId().equals(player.getUniqueId())){
+                crew.setLeader(player);
+            }else if(crew.getMembers().contains(player)){
+                crew.getMembers().add(player);
+            }
+        });
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(BukkitAdapter.adapt(player.getWorld()));
         if(regions != null){

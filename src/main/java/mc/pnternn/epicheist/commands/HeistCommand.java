@@ -67,6 +67,9 @@ public class HeistCommand implements CommandExecutor {
                         if (sender.hasPermission("heist.admin"))
                             new AdminPanelGui((Player) sender).open();
                     }case "test" ->{
+                        EpicHeist.getInstance().getCrewManager().getCrewList().forEach(crew -> {
+                            Bukkit.broadcastMessage(crew.getName());
+                        });
                     }case "crew" -> {
                         if(args.length > 1){
                             if (sender instanceof Player) {
@@ -263,9 +266,7 @@ public class HeistCommand implements CommandExecutor {
             }else{
                 if(args.length > 0){
                     switch (args[0].toLowerCase()){
-                        case "crew" ->{
-
-                        }default -> {
+                        default -> {
                             sender.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cBu komut sadece spawnda ve bankada çalışır!"));
                         }
                     }

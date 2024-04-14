@@ -3,6 +3,7 @@ package mc.pnternn.epicheist.managers;
 import mc.pnternn.epicheist.EpicHeist;
 import mc.pnternn.epicheist.config.ConfigurationHandler;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,11 +19,16 @@ public class CrewManager {
     public List<Crew> getCrewList() {
         return this.crewList;
     }
+    public void setCrewList(List<Crew> crews) {
+        this.crewList = crews;
+    }
 
     public void addCrew(Crew paramCrew) {
         if (!this.crewList.contains(paramCrew))
             this.crewList.add(paramCrew);
-
+    }
+    public void setLeader(Crew paramCrew, Player paramPlayer) {
+        paramCrew.setLeader(paramPlayer);
     }
 
     public void removeCrew(Crew paramCrew) {
