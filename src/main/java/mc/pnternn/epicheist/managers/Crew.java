@@ -28,25 +28,38 @@ public class Crew {
         this.leader = EpicHeist.getInstance().getServer().getOfflinePlayer(UUID.fromString(this.crewFile.getString("leader")));
         this.members = (List<OfflinePlayer>) this.crewFile.getList("members");
     }
+    public Crew(UUID id, OfflinePlayer leader, String name, List<OfflinePlayer> members){
+        this.id = id;
+        this.leader = leader;
+        this.name = name;
+        this.members = members;
+    }
     public Crew(OfflinePlayer paramPlayer, List<OfflinePlayer> paramList) {
-        this.name = paramPlayer.getName() + "'s Crew";
+        this.name = paramPlayer.getName() + "s Crew";
         this.id = UUID.randomUUID();
         this.leader = paramPlayer;
         this.members = paramList;
-        File crewFile = new File(EpicHeist.getInstance().getDataFolder()+File.separator+"crews"+File.separator+this.id+".yml");
-        if(!crewFile.exists()) {
-            try {
-                crewFile.createNewFile();
-                this.crewFile = YamlConfiguration.loadConfiguration(crewFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        if(!ConfigurationHandler.getValue("sql.enabled").equals("true")){
+            File crewFile = new File(EpicHeist.getInstance().getDataFolder()+File.separator+"crews"+File.separator+this.id+".yml");
+            if(!crewFile.exists()) {
+                try {
+                    crewFile.createNewFile();
+                    this.crewFile = YamlConfiguration.loadConfiguration(crewFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            this.crewFile.set("name", this.name);
+            this.crewFile.set("id", this.id.toString());
+            this.crewFile.set("leader", this.leader.getUniqueId().toString());
+            this.crewFile.set("members", this.members);
+            saveConfig();
+        }else{
+            EpicHeist.getInstance().getMySql().createCrew(this.id.toString(), this.name, this.leader.getUniqueId().toString());
+            for(OfflinePlayer player : this.members){
+                EpicHeist.getInstance().getMySql().addMember(this.id.toString(), player.getUniqueId().toString());
             }
         }
-        this.crewFile.set("name", this.name);
-        this.crewFile.set("id", this.id.toString());
-        this.crewFile.set("leader", this.leader.getUniqueId().toString());
-        this.crewFile.set("members", this.members);
-        saveConfig();
     }
     public void saveConfig(){
         try {
@@ -64,8 +77,12 @@ public class Crew {
     }
     public void setName(String paramString) {
         this.name = paramString;
-        this.crewFile.set("name", paramString);
-        saveConfig();
+        if(!ConfigurationHandler.getValue("sql.enabled").equals("true")) {
+            this.crewFile.set("name", paramString);
+            saveConfig();
+        }else{
+            EpicHeist.getInstance().getMySql().renameCrew(this.id.toString(), paramString);
+        }
     }
 
     public OfflinePlayer getLeader() {

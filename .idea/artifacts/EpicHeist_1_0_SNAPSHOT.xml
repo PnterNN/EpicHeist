@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="EpicHeist-1.0-SNAPSHOT">
-    <output-path>$USER_HOME$/Desktop</output-path>
+    <output-path>$USER_HOME$/Desktop/ /SERVERS/GrandSkyblock/plugins</output-path>
     <root id="archive" name="EpicHeist-1.0-SNAPSHOT.jar">
       <element id="module-output" name="EpicHeist" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/Minikloon/Kloggs/-6d3735f72e-1/Kloggs--6d3735f72e-1.jar" path-in-jar="/" />

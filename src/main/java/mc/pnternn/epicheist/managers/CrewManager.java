@@ -1,6 +1,7 @@
 package mc.pnternn.epicheist.managers;
 
 import mc.pnternn.epicheist.EpicHeist;
+import mc.pnternn.epicheist.config.ConfigurationHandler;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -21,25 +22,38 @@ public class CrewManager {
     public void addCrew(Crew paramCrew) {
         if (!this.crewList.contains(paramCrew))
             this.crewList.add(paramCrew);
+
     }
 
     public void removeCrew(Crew paramCrew) {
         this.crewList.remove(paramCrew);
-        File crewFile = new File(EpicHeist.getInstance().getDataFolder()+File.separator+"crews"+ File.separator+paramCrew.getId()+".yml");
-        crewFile.delete();
+        if(!ConfigurationHandler.getValue("sql.enabled").equals("true")){
+            File crewFile = new File(EpicHeist.getInstance().getDataFolder()+File.separator+"crews"+ File.separator+paramCrew.getId()+".yml");
+            crewFile.delete();
+        }else{
+            EpicHeist.getInstance().getMySql().deleteCrew(paramCrew.getId().toString());
+        }
     }
 
     public void addMember(Player paramPlayer, Crew paramCrew) {
         if (!paramCrew.getMembers().contains(paramPlayer)){
             paramCrew.getMembers().add(paramPlayer);
-            paramCrew.crewFile.set("members", paramCrew.getMembers());
-            paramCrew.saveConfig();
+            if(!ConfigurationHandler.getValue("sql.enabled").equals("true")){
+                paramCrew.crewFile.set("members", paramCrew.getMembers());
+                paramCrew.saveConfig();
+            }else{
+                EpicHeist.getInstance().getMySql().addMember(paramCrew.getId().toString(), paramPlayer.getUniqueId().toString());
+            }
         }
     }
     public void removeMember(Player paramPlayer, Crew paramCrew) {
         paramCrew.getMembers().remove(paramPlayer);
-        paramCrew.crewFile.set("members", paramCrew.getMembers());
-        paramCrew.saveConfig();
+        if(!ConfigurationHandler.getValue("sql.enabled").equals("true")){
+            paramCrew.crewFile.set("members", paramCrew.getMembers());
+            paramCrew.saveConfig();
+        }else{
+            EpicHeist.getInstance().getMySql().removeMember(paramCrew.getId().toString(), paramPlayer.getUniqueId().toString());
+        }
     }
     public void addPendingInvite(Player paramPlayer, Crew paramCrew) {
         this.pendingInvites.put(paramPlayer.getUniqueId(), paramCrew);

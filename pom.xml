@@ -75,6 +75,12 @@
             <version>5.1.2</version>
         </dependency>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>compiled</scope>
+            <version>8.0.17</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.hamza-cskn.obliviate-invs</groupId>
             <artifactId>core</artifactId>
             <version>4.3.0</version>

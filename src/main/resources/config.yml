@@ -1,5 +1,12 @@
 prefix: '&3Heist &8» '
 main-server: true #IF REDIS FALSE MUST BE TRUE
+sql:
+  enabled: false
+  host: '127.0.0.1'
+  port: 3306
+  database: 'epicheist'
+  username: ''
+  password: ''
 redis:
   enabled: false
   host: '127.0.0.1'
@@ -161,7 +168,7 @@ swat:
   name: '&1SWAT'
   amount: 2 # per player
   speed-level: 1
-  jump: 0.5
+  jump: 0.5 # jump height (jump per 3 second)
   armor:
     helmet: DIAMOND_HELMET
     chestplate: DIAMOND_CHESTPLATE

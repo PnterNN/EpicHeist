@@ -75,9 +75,13 @@ public class HeistCommand implements CommandExecutor {
                                     case "rename" ->{
                                         if (EpicHeist.getInstance().getCrewManager().isInCrew(p)) {
                                             if (EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getLeader().equals(p)) {
-                                                EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).setName(args[2]);
-                                                p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aCrew renamed!"));
-                                            } else {
+                                                if(!args[1].contains("'")){
+                                                    EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).setName(args[2]);
+                                                    p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aCrew renamed!"));
+                                                }else{
+                                                    p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cInvalid name!"));
+                                                }
+                                            }else {
                                                 p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cYou are not the leader of the crew!"));
                                             }
                                         } else {
@@ -112,7 +116,7 @@ public class HeistCommand implements CommandExecutor {
                                                         p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cPlayer is already in the crew!"));
                                                         return false;
                                                     }
-                                                    if (target != null) {
+                                                    if (target != null && target != p) {
                                                         EpicHeist.getInstance().getCrewManager().addPendingInvite(target, EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p));
                                                         target.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aYou have been invited to a crew!"));
                                                         p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aInvite sent!"));
@@ -164,7 +168,7 @@ public class HeistCommand implements CommandExecutor {
                                     }case "leave" -> {
                                         if (EpicHeist.getInstance().getCrewManager().isInCrew(p)) {
                                             if(EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getLeader() != p){
-                                                EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p).getMembers().remove(p);
+                                                EpicHeist.getInstance().getCrewManager().removeMember(p, EpicHeist.getInstance().getCrewManager().getCrewByPlayer(p));
                                                 p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&aYou have left the crew!"));
                                             }else{
                                                 p.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cYou are the leader of the crew!"));
@@ -257,7 +261,16 @@ public class HeistCommand implements CommandExecutor {
                     }
                 }
             }else{
-                sender.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cBu komut sadece spawnda ve bankada çalışır!"));
+                if(args.length > 0){
+                    switch (args[0].toLowerCase()){
+                        case "crew" ->{
+
+                        }default -> {
+                            sender.sendMessage(StringUtil.parseColor(ConfigurationHandler.getValue("prefix") + "&cBu komut sadece spawnda ve bankada çalışır!"));
+                        }
+                    }
+                }
+
             }
         } else {
             if(sender.hasPermission("heist.admin")) {

@@ -118,11 +118,13 @@ public class DataHolder {
                 player.showPlayer(players);
             }
             player.teleport(ConfigurationHandler.getBankLocation());
+
             ColorUtil.showTitle(player,
                     ConfigurationHandler.getValue("animated-titles.heist-cancel.background-color"),
                     ConfigurationHandler.getValue("animated-titles.heist-cancel.title-color"),
                     ConfigurationHandler.getValue("animated-titles.heist-cancel.title"),
                     ConfigurationHandler.getValue("animated-titles.heist-cancel.subtitle"));
+
         }
         EpicHeist.getInstance().getProtocolManager().removePacketListener(goldBreakEvent);
 

@@ -19,10 +19,13 @@ import mc.pnternn.epicheist.listeners.OnCommand;
 import mc.pnternn.epicheist.managers.Crew;
 import mc.pnternn.epicheist.managers.CrewManager;
 import mc.pnternn.epicheist.managers.RedisManager;
+import mc.pnternn.epicheist.sql.MySQL;
+import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -31,6 +34,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class EpicHeist extends JavaPlugin implements Listener {
@@ -42,20 +47,31 @@ public class EpicHeist extends JavaPlugin implements Listener {
     private ProtocolManager manager;
     private CrewManager crewManager;
     private RedisManager redisManager;
+    private MySQL mySql;
 
     @Override
     public void onEnable() {
+        manager = ProtocolLibrary.getProtocolManager();
+        configurationHandler.init();
         this.crewManager = new CrewManager();
-        File folder = new File(getDataFolder()+File.separator+"crews");
-        if(!folder.exists()) folder.mkdirs();
-        for (File file : folder.listFiles()) {
-            if (file.isFile()) {
-                crewManager.addCrew(new Crew(file));
+
+
+        if(!ConfigurationHandler.getValue("sql.enabled").equals("true")){
+            File folder = new File(getDataFolder()+File.separator+"crews");
+            if(!folder.exists()) folder.mkdirs();
+            for (File file : folder.listFiles()) {
+                if (file.isFile()) {
+                    crewManager.addCrew(new Crew(file));
+                }
+            }
+        }else{
+            mySql = new MySQL(ConfigurationHandler.getValue("sql.host"), ConfigurationHandler.getValue("sql.port"), ConfigurationHandler.getValue("sql.database"), ConfigurationHandler.getValue("sql.username"), ConfigurationHandler.getValue("sql.password"));
+            mySql.createTable();
+            for(Crew crew : mySql.getCrews()){
+                crewManager.addCrew(crew);
             }
         }
 
-        manager = ProtocolLibrary.getProtocolManager();
-        configurationHandler.init();
         this.getLogger().info("EpicHeist created by PnterNN");
         this.getLogger().info("Discord: PnterNN#8478");
         if (!this.setupEconomy()) {
@@ -139,6 +155,9 @@ public class EpicHeist extends JavaPlugin implements Listener {
     }
     public CrewManager getCrewManager() {
         return crewManager;
+    }
+    public MySQL getMySql() {
+        return mySql;
     }
 
     public static EpicHeist getInstance(){
