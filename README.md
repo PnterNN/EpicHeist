@@ -405,3 +405,4 @@ admin-panel-gui-rewards-third:
         - '&73. takımın ödüllerini ayarlayın.'
         - '&r'
         - '&aSol-Tık ile kaydet'```
+[![showcase](https://youtu.be/UZN0hQq2Ius?si=x50ieZO6J02MLkVZ)
