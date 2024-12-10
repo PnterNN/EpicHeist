@@ -11,6 +11,8 @@ This plugin adds a heist event to Minecraft servers. Players go to a bank at the
 - **Jail:** Players caught by the police or those who fall from the parkour are sent to jail, and half of their stolen gold is confiscated.
 - **Winning Teams:** At the end of the event, the top 3 teams are announced in the chat and receive rewards.
 
+## Video
+
 <div align="center">
     <a href="https://youtu.be/UZN0hQq2Ius?si=x50ieZO6J02MLkVZ">
         <img src="https://xforgeassets002.xboxlive.com/pf-namespace-b63a0803d3653643/ad6f72fb-459d-4b1f-b525-d09eeb17d197/H2_Thumbnail_0.jpg" alt="showcase">
